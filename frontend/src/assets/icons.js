@@ -6,10 +6,7 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import { HiX } from "react-icons/hi";
 import { AiFillHome } from "react-icons/ai";
 import { MdRestaurantMenu } from "react-icons/md";
-
-import { FaInstagram } from "react-icons/fa";
-import { FaFacebookSquare } from "react-icons/fa";
-import { FaTwitterSquare } from "react-icons/fa";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 import { GrInstagram } from "react-icons/gr";
 import { FaTwitter } from "react-icons/fa";
@@ -24,10 +21,8 @@ export {
   HiX,
   AiFillHome,
   MdRestaurantMenu,
-  FaInstagram,
-  FaFacebookSquare,
-  FaTwitterSquare,
   GrInstagram,
   FaTwitter,
   FaFacebook,
+  FaArrowRightLong,
 };

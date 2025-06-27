@@ -14,7 +14,7 @@ const Navbar = () => {
 
   return (
     <header className="min-w-full sticky top-0 z-100 md:backdrop-blur-md bg-amber-100  md:bg-amber-100/50">
-      <div className="flex justify-between items-center py-3 md:py-5 md:max-w-10/12 mx-auto">
+      <div className="flex justify-between items-center p-3 md:py-5 md:max-w-10/12 mx-auto">
         <div className="logo">
           <h1 className="text-orange-500 font-quicksand text-xl md:text-2xl font-bold cursor-default tracking-wide">
             hungrify
@@ -55,15 +55,36 @@ const Navbar = () => {
             >
               Home
             </NavLink>
-            <li className="hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400">
+            <NavLink
+              to="/explore-menu"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-orange-400 border-b-2 border-b-orange-400"
+                  : "hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
+              }
+            >
               Menu
-            </li>
-            <li className="hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400">
+            </NavLink>
+            <NavLink
+              to="/app"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-orange-400 border-b-2 border-b-orange-400"
+                  : "hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
+              }
+            >
               Mobile-app
-            </li>
-            <li className="hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400">
+            </NavLink>
+            <NavLink
+              to="/contact"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-orange-400 border-b-2 border-b-orange-400"
+                  : "hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
+              }
+            >
               Contact Us
-            </li>
+            </NavLink>
           </ul>
         </div>
         <div className="navbar-right hidden md:flex items-center gap-x-7">
