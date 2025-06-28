@@ -1,3 +1,5 @@
+import { Link } from "react-scroll";
+
 import {
   GrInstagram,
   FaTwitter,
@@ -51,30 +53,46 @@ const Footer = () => {
         <div className="center">
           <nav>
             <ul className="flex justify-between flex-col gap-2 md:gap-3 text-base">
-              <NavLink
-                to="#"
-                className=" hover:text-amber-200 transition duration-150 cursor-pointer"
+              <Link
+                to="home"
+                smooth={true}
+                offset={-70}
+                duration={500}
+                spy={true}
+                className="hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
               >
                 Home
-              </NavLink>
+              </Link>
               <NavLink
-                to="#"
-                className=" hover:text-amber-200 transition duration-150 cursor-pointer"
-              >
-                About Us
-              </NavLink>
-              <NavLink
-                to="#"
-                className=" hover:text-amber-200 transition duration-150 cursor-pointer"
+                to="/cart"
+                smooth={true}
+                offset={-70}
+                duration={500}
+                spy={true}
+                className="hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
               >
                 Delivery
               </NavLink>
               <NavLink
-                to="#"
-                className=" hover:text-amber-200 transition duration-150 cursor-pointer"
+                to="/about"
+                smooth={true}
+                offset={-70}
+                duration={500}
+                spy={true}
+                className="hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
               >
-                Privacy Policy
+                About Us
               </NavLink>
+              <Link
+                to="footer"
+                smooth={true}
+                offset={-70}
+                duration={500}
+                spy={true}
+                className="hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
+              >
+                Contact Us
+              </Link>
             </ul>
           </nav>
         </div>

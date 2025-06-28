@@ -7,6 +7,7 @@ import { HiX } from "react-icons/hi";
 import { AiFillHome } from "react-icons/ai";
 import { MdRestaurantMenu } from "react-icons/md";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { IoArrowDownCircleOutline } from "react-icons/io5";
 
 import { GrInstagram } from "react-icons/gr";
 import { FaTwitter } from "react-icons/fa";
@@ -25,4 +26,5 @@ export {
   FaTwitter,
   FaFacebook,
   FaArrowRightLong,
+  IoArrowDownCircleOutline,
 };

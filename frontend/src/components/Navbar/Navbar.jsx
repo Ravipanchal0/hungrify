@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { Link } from "react-scroll";
 import {
   IoBagHandle,
   IoSearch,
@@ -45,46 +46,50 @@ const Navbar = () => {
         {/* {Desktop Navbar} */}
         <div className="navbar-menu hidden md:flex">
           <ul className="flex items-center gap-x-8 text-[#7d390c]  text-lg">
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-orange-400 border-b-2 border-b-orange-400"
-                  : "hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
-              }
+            <Link
+              to="home"
+              smooth={true}
+              offset={-70}
+              duration={500}
+              spy={true}
+              activeClass="text-orange-400 border-b-2 border-b-orange-400"
+              className="hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
             >
               Home
-            </NavLink>
-            <NavLink
-              to="/explore-menu"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-orange-400 border-b-2 border-b-orange-400"
-                  : "hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
-              }
+            </Link>
+            <Link
+              to="explore-menu"
+              smooth={true}
+              offset={-70}
+              duration={500}
+              spy={true}
+              activeClass="text-orange-400 border-b-2 border-b-orange-400"
+              className="hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
             >
               Menu
-            </NavLink>
-            <NavLink
-              to="/app"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-orange-400 border-b-2 border-b-orange-400"
-                  : "hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
-              }
+            </Link>
+            <Link
+              to="mobile-app"
+              smooth={true}
+              offset={-70}
+              duration={500}
+              spy={true}
+              activeClass="text-orange-400 border-b-2 border-b-orange-400"
+              className="hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
             >
               Mobile-app
-            </NavLink>
-            <NavLink
-              to="/contact"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-orange-400 border-b-2 border-b-orange-400"
-                  : "hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
-              }
+            </Link>
+            <Link
+              to="footer"
+              smooth={true}
+              offset={-70}
+              duration={500}
+              spy={true}
+              activeClass="text-orange-400 border-b-2 border-b-orange-400"
+              className="hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
             >
               Contact Us
-            </NavLink>
+            </Link>
           </ul>
         </div>
         <div className="navbar-right hidden md:flex items-center gap-x-7">

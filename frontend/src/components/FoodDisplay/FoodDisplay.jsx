@@ -6,7 +6,7 @@ const FoodDisplay = ({ category }) => {
   const { food_list } = useContext(StoreContext);
 
   return (
-    <div className="food-display my-4 md:my-8">
+    <div id="explore-menu" className="food-display my-4 md:my-8">
       <h2 className="text-xl md:text-2xl font-medium md:font-semibold">
         Top dishes near you
       </h2>

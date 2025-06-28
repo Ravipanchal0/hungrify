@@ -1,8 +1,10 @@
+import { Link } from "react-scroll";
 import { assets } from "../../assets/assets";
+import { IoArrowDownCircleOutline } from "../../assets/icons";
 
 const Hero = () => {
   return (
-    <div className="my-4 md:my-10">
+    <div id="home" className="my-4 md:my-10">
       <div
         className="w-full md:min-h-[34vw] min-h-44 sm:min-h-56 relative bg-contain bg-center bg-no-repeat md:px-6 rounded-lg text-white"
         style={{ backgroundImage: `url(${assets.header_img})` }}
@@ -33,6 +35,14 @@ const Hero = () => {
             </button>
           </div>
         </div>
+      </div>
+      <div className="scroll">
+        <Link to="footer" smooth={500} className="absolute bottom-10 right-14">
+          <IoArrowDownCircleOutline
+            size={40}
+            className="text-icon animate-bounce cursor-pointer"
+          />
+        </Link>
       </div>
     </div>
   );
