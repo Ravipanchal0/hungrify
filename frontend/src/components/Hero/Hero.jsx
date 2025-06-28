@@ -37,10 +37,16 @@ const Hero = () => {
         </div>
       </div>
       <div className="scroll">
-        <Link to="footer" smooth={500} className="absolute bottom-10 right-14">
+        <Link
+          to="explore-menu"
+          smooth={500}
+          offset={-70}
+          spy={true}
+          className="hidden md:inline-block absolute bottom-10 right-14"
+        >
           <IoArrowDownCircleOutline
-            size={40}
-            className="text-icon animate-bounce cursor-pointer"
+            // size={40}
+            className="text-icon animate-bounce cursor-pointer size-12"
           />
         </Link>
       </div>

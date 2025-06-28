@@ -27,18 +27,30 @@ const Navbar = () => {
         <div className="md:hidden fixed bottom-5 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-xs">
           <div className="nav-menu mx-auto rounded-full bg-amber-100/40 backdrop-blur-md px-3 py-3 shadow">
             <ul className="flex justify-evenly items-center gap-x-3 text-[24px] text-[#7d390c]">
-              <li className="hover:text-orange-400 hover:transform hover:-translate-y-1 transition duration-300 cursor-pointer">
+              <Link
+                to="home"
+                smooth={200}
+                offset={-70}
+                spy={true}
+                className="hover:text-orange-400 hover:transform hover:-translate-y-1 transition duration-300 cursor-pointer"
+              >
                 <AiFillHome />
-              </li>
-              <li className="hover:text-orange-400 hover:transform hover:-translate-y-1 transition duration-300 cursor-pointer">
+              </Link>
+              <Link
+                to="explore-menu"
+                smooth={200}
+                offset={-60}
+                spy={true}
+                className="hover:text-orange-400 hover:transform hover:-translate-y-1 transition duration-300 cursor-pointer"
+              >
                 <MdRestaurantMenu />
-              </li>
-              <li className="hover:text-orange-400 hover:transform hover:-translate-y-1 transition duration-300 cursor-pointer">
+              </Link>
+              <Link className="hover:text-orange-400 hover:transform hover:-translate-y-1 transition duration-300 cursor-pointer">
                 <IoSearch />
-              </li>
-              <li className="hover:text-orange-400 hover:transform hover:-translate-y-1 transition duration-300 cursor-pointer">
+              </Link>
+              <Link className="hover:text-orange-400 hover:transform hover:-translate-y-1 transition duration-300 cursor-pointer">
                 <IoBagHandle />
-              </li>
+              </Link>
             </ul>
           </div>
         </div>
@@ -49,7 +61,7 @@ const Navbar = () => {
             <Link
               to="home"
               smooth={true}
-              offset={-70}
+              offset={-100}
               duration={500}
               spy={true}
               activeClass="text-orange-400 border-b-2 border-b-orange-400"

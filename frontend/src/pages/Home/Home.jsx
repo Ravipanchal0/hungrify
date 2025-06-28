@@ -6,8 +6,10 @@ const Home = () => {
   return (
     <div className="md:max-w-10/12 mx-auto md:my-10 px-3">
       <Hero />
-      <ExploreMenu category={category} setCategory={setCategory} />
-      <FoodDisplay category={category} />
+      <div id="explore-menu">
+        <ExploreMenu category={category} setCategory={setCategory} />
+        <FoodDisplay category={category} />
+      </div>
       <AppDownload />
     </div>
   );
