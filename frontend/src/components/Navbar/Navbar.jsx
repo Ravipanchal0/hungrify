@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Link } from "react-scroll";
 import {
   IoBagHandle,
@@ -11,6 +11,7 @@ import {
 import { StoreContext } from "../../context/StoreContext.jsx";
 
 const Navbar = ({ setShowLogin }) => {
+  const navigate = useNavigate();
   const { getTotalCartAmount } = useContext(StoreContext);
   const total = parseInt(getTotalCartAmount());
 
@@ -65,6 +66,7 @@ const Navbar = ({ setShowLogin }) => {
         <div className="navbar-menu hidden md:flex">
           <ul className="flex items-center gap-x-8 text-[#7d390c]  text-lg">
             <Link
+              onClick={() => navigate("/")}
               to="home"
               smooth={true}
               offset={-100}
@@ -76,6 +78,7 @@ const Navbar = ({ setShowLogin }) => {
               Home
             </Link>
             <Link
+              onClick={() => navigate("/")}
               to="explore-menu"
               smooth={true}
               offset={-70}

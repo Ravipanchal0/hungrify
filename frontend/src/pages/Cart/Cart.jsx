@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { StoreContext } from "../../context/StoreContext";
 import { IoMdAdd, IoMdRemove, MdDelete } from "../../assets/icons.js";
 import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
+  const [couponAmount, setCouponAmount] = useState(0);
   const navigate = useNavigate();
   const {
     cartItems,
@@ -14,10 +15,8 @@ const Cart = () => {
     getTotalCartAmount,
   } = useContext(StoreContext);
   let totalAmount = getTotalCartAmount();
-  let taxes = (totalAmount * 0.08).toFixed(2);
-  let shippingCharges = totalAmount > 299 ? 0 : totalAmount > 0 ? 49 : 0;
   let totalPayable = Math.round(
-    parseFloat(totalAmount) + parseFloat(taxes) + parseFloat(shippingCharges)
+    parseFloat(totalAmount) - parseFloat(couponAmount)
   );
   return totalAmount > 0 ? (
     <div className="cart-page md:max-w-10/12 mx-auto md:my-10 px-3">
@@ -76,36 +75,17 @@ const Cart = () => {
         <div className="cart-payment-detail flex flex-col md:flex-row md:justify-between md:items-baseline md:gap-x-24 gap-y-8 md:gap-y-0 mb-10">
           <div className="cart-total md:flex-3/6">
             <p className="text-lg font-medium">Cart Total:</p>
-            <div className="cart-total-details ml-1 flex flex-col gap-y-1">
-              <div className="subtotal-details flex justify-between  text-sm border-b border-b-gray-300 pb-1 mb-1">
+            <div className="cart-total-details ml-1 flex flex-col gap-y-1 mt-2">
+              <div className="subtotal-details flex justify-between  text-sm mb-1">
                 <p>Subtotal :</p>
                 <p>
                   &#x20B9;&nbsp;
                   {totalAmount}
                 </p>
               </div>
-              <div className="taxes flex justify-between  text-sm border-b border-b-gray-300 pb-1 mb-1">
-                <p>GST (18%) :</p>
-                <p>
-                  &#x20B9;&nbsp;
-                  {taxes}
-                </p>
-              </div>
-              <div className="shipping-charges flex justify-between  text-sm">
-                <div>
-                  <p>Shipping :</p>
-                  <i className="text-xs text-gray-400">
-                    {totalAmount > 299
-                      ? "(Free delivery above ₹299)"
-                      : `(add items worth ${
-                          299 - totalAmount
-                        } more to free delivery)`}
-                  </i>
-                </div>
-                <p>
-                  &#x20B9;&nbsp;
-                  {shippingCharges.toFixed(2)}
-                </p>
+              <div className="coupon-amount flex justify-between  text-sm mb-1">
+                <p className="text-sm text-gray-600 mb-1">Coupon Discount :</p>
+                <p className="text-sm text-gray-600 mb-1">- &#x20B9; 0.00</p>
               </div>
 
               <hr className="my-1" />
