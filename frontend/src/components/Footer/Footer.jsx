@@ -65,20 +65,12 @@ const Footer = () => {
               </Link>
               <NavLink
                 to="/cart"
-                smooth={true}
-                offset={-70}
-                duration={500}
-                spy={true}
                 className="hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
               >
                 Delivery
               </NavLink>
               <NavLink
                 to="/about"
-                smooth={true}
-                offset={-70}
-                duration={500}
-                spy={true}
                 className="hover:transform hover:-translate-y-0.5 hover:text-orange-400 transition duration-200 cursor-pointer hover:border-b-2 hover:border-b-orange-400"
               >
                 About Us

@@ -5,6 +5,7 @@ import FoodDisplay from "./FoodDisplay/FoodDisplay";
 import FoodItem from "./FoodItem/FoodItem";
 import AppDownload from "./AppDownload/AppDownload";
 import Footer from "./Footer/Footer";
+import LoginModal from "./LoginModal/LoginModal";
 
 export {
   Navbar,
@@ -14,4 +15,5 @@ export {
   FoodItem,
   AppDownload,
   Footer,
+  LoginModal,
 };

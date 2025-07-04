@@ -10,16 +10,19 @@ import {
 } from "../../assets/icons.js";
 import { StoreContext } from "../../context/StoreContext.jsx";
 
-const Navbar = () => {
-  const { cartItems } = useContext(StoreContext);
+const Navbar = ({ setShowLogin }) => {
+  const { getTotalCartAmount } = useContext(StoreContext);
+  const total = parseInt(getTotalCartAmount());
 
   return (
     <header className="min-w-full sticky top-0 z-100 md:backdrop-blur-md bg-amber-100  md:bg-amber-100/50">
       <div className="flex justify-between items-center p-3 md:py-5 md:max-w-10/12 mx-auto">
         <div className="logo">
-          <h1 className="text-orange-500 font-quicksand text-xl md:text-2xl font-bold cursor-default tracking-wide">
-            hungrify
-          </h1>
+          <NavLink to="/">
+            <h1 className="text-orange-500 font-quicksand text-xl md:text-2xl font-bold cursor-default tracking-wide">
+              hungrify
+            </h1>
+          </NavLink>
         </div>
         <div className="md:hidden profile size-8 rounded-full ring-1 ring-[#7d390c]"></div>
 
@@ -41,16 +44,19 @@ const Navbar = () => {
                 smooth={200}
                 offset={-60}
                 spy={true}
-                className="hover:text-orange-400 hover:transform hover:-translate-y-1 transition duration-300 cursor-pointer"
+                className=" hover:text-orange-400 hover:transform hover:-translate-y-1 transition duration-300 cursor-pointer"
               >
                 <MdRestaurantMenu />
               </Link>
-              <Link className="hover:text-orange-400 hover:transform hover:-translate-y-1 transition duration-300 cursor-pointer">
+              <NavLink className="search hover:text-orange-400 hover:transform hover:-translate-y-1 transition duration-300 cursor-pointer">
                 <IoSearch />
-              </Link>
-              <Link className="hover:text-orange-400 hover:transform hover:-translate-y-1 transition duration-300 cursor-pointer">
+              </NavLink>
+              <NavLink
+                to="/cart"
+                className="cart hover:text-orange-400 hover:transform hover:-translate-y-1 transition duration-300 cursor-pointer"
+              >
                 <IoBagHandle />
-              </Link>
+              </NavLink>
             </ul>
           </div>
         </div>
@@ -112,20 +118,24 @@ const Navbar = () => {
               title="Search"
             />
           </div>
-          <div className="cart-icon relative" title="Cart">
+          <NavLink to="/cart" className="cart-icon relative" title="Cart">
             <IoBagHandle
               size={22}
               className="text-[#bc6429] hover:text-orange-500 transition duration-150 cursor-pointer"
             />
             <div
               className={
-                cartItems
+                !total
                   ? "hidden"
                   : "dot absolute -top-1 -right-1 size-2 rounded-full bg-orange-500"
               }
             ></div>
-          </div>
-          <button className="sign-in " title="Sign in">
+          </NavLink>
+          <button
+            onClick={() => setShowLogin(true)}
+            className="sign-in "
+            title="Sign in"
+          >
             <FaSignInAlt
               size={24}
               className="text-[#bc6429] transition duration-150 cursor-pointer hover:transform hover:translate-x-0.5 hover:text-orange-500"

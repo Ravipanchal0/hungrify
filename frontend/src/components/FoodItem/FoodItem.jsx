@@ -51,7 +51,7 @@ const FoodItem = (item) => {
       </div>
       <div className="food-info mt-3 flex flex-col flex-1">
         <div className="price flex items-center text-icon gamd:p-x-1 text-sm md:text-lg font-medium">
-          <p className="price">${discount_price}</p>
+          <p className="price">&#x20B9; {discount_price}</p>
           <p className="main-price">
             <span className="line-through text-gray-400 text-xs md:text-sm font-normal">
               {main_price}

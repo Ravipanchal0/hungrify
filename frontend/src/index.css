@@ -7,6 +7,27 @@
   --color-icon: #ff4c24;
   --color-separator: #e66a1182;
   --animate-fadeIn: fadeIn 1s linear;
+  --animate-zoomIn: zoomIn 0.3s ease-out forwards;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Animations */
+@keyframes zoomIn {
+  0% {
+    transform: scale(0.1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes fadeIn {
@@ -18,19 +39,4 @@
     opacity: 1;
     transform: translateX(0);
   }
-}
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.hide-scrollbar {
-  -ms-overflow-style: none; /* IE/Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.separation-line {
-  width: 100%;
-  border: none;
-  height: 1.5px;
-  background-color: #e66a1182;
-  margin: 5px 0;
 }
