@@ -12,6 +12,10 @@ const menuItemSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    discount: {
+      type: Number,
+      default: 0, // Default discount is 0%
+    },
     image: String,
     category: String, // e.g., Pizza, Drinks
     isAvailable: {
