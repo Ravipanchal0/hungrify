@@ -39,20 +39,39 @@ const getAllMenuItems = asyncHandler(async (req, res) => {
   const menuItems = await menuItemModel.find({});
 
   if (!menuItems || menuItems.length === 0) {
-    throw new ApiError(404, "No menu items found");
+    res
+      .status(200)
+      .json(new ApiResponse(200, "No menu items found", menuItems));
   }
   res
     .status(200)
     .json(new ApiResponse(200, "Menu items fetched successfully", menuItems));
 });
 
-// @desc    change status of menu item
+// @desc    get a menu item
+// @route   GET /api/menuitme/menulist/:id
+// @access  Public
+const getMenuItemById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const menuItem = await menuItemModel.findById(id);
+
+  if (!menuItem) {
+    throw new ApiError(404, "Menu item not found");
+  }
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Menu item fetched successfully", menuItem));
+});
+
+// @desc    edit details of a menu item
 // @route   GET /api/menuitme/edit/:id
 // @access  Private/Admin
 const editMenuItem = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { name, price, description, category, discount, isAvailable } =
     req.body;
+
   const menuItem = await menuItemModel.findById(id);
   if (!menuItem) {
     throw new ApiError(404, "Menu item not found");
@@ -65,8 +84,12 @@ const editMenuItem = asyncHandler(async (req, res) => {
       price: price || menuItem.price,
       description: description || menuItem.description,
       category: category || menuItem.category,
-      discount: discount ? parseFloat(discount) : menuItem.discount,
-      isAvailable: isAvailable || menuItem.isAvailable,
+      discount:
+        discount !== undefined && discount !== null
+          ? parseFloat(discount)
+          : menuItem.discount,
+      isAvailable:
+        typeof isAvailable === "boolean" ? isAvailable : menuItem.isAvailable,
     },
     { new: true }
   );
@@ -101,4 +124,10 @@ const removeMenuItem = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Menu item removed successfully", menuItem));
 });
 
-export { addMenuItem, getAllMenuItems, editMenuItem, removeMenuItem };
+export {
+  addMenuItem,
+  getAllMenuItems,
+  getMenuItemById,
+  editMenuItem,
+  removeMenuItem,
+};
