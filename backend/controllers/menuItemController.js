@@ -3,6 +3,7 @@ import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import menuItemModel from "../models/menuItemModel.js";
 import uploadImage from "../utils/uploadImage.js";
+import deleteImage from "../utils/deleteImage.js";
 
 // @desc    add menu items
 // @route   POST /api/menuitmes/add
@@ -12,8 +13,7 @@ const addMenuItem = asyncHandler(async (req, res) => {
   const imageLocalPath = req.file ? req.file.path : null;
 
   if (!name || !price || !description || !category) {
-    res.status(400);
-    throw new ApiError(404, "Please fill all the fields");
+    throw new ApiError(400, "Please fill all the fields");
   }
 
   const imageUrl = await uploadImage(imageLocalPath);
@@ -32,4 +32,73 @@ const addMenuItem = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, "Menu item added successfully", menuItem));
 });
 
-export { addMenuItem };
+// @desc    get all menu items
+// @route   GET /api/menuitme/menulist
+// @access  Public
+const getAllMenuItems = asyncHandler(async (req, res) => {
+  const menuItems = await menuItemModel.find({});
+
+  if (!menuItems || menuItems.length === 0) {
+    throw new ApiError(404, "No menu items found");
+  }
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Menu items fetched successfully", menuItems));
+});
+
+// @desc    change status of menu item
+// @route   GET /api/menuitme/edit/:id
+// @access  Private/Admin
+const editMenuItem = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { name, price, description, category, discount, isAvailable } =
+    req.body;
+  const menuItem = await menuItemModel.findById(id);
+  if (!menuItem) {
+    throw new ApiError(404, "Menu item not found");
+  }
+
+  const updatedData = await menuItemModel.findByIdAndUpdate(
+    id,
+    {
+      name: name || menuItem.name,
+      price: price || menuItem.price,
+      description: description || menuItem.description,
+      category: category || menuItem.category,
+      discount: discount ? parseFloat(discount) : menuItem.discount,
+      isAvailable: isAvailable || menuItem.isAvailable,
+    },
+    { new: true }
+  );
+
+  if (!updatedData) {
+    throw new ApiError(404, "Menu item not found");
+  }
+
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, "Menu item status updated successfully", updatedData)
+    );
+});
+
+// @desc    remove menu item
+// @route   DELETE /api/menuitme/remove/:id
+// @access  Private/Admin
+const removeMenuItem = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const menuItem = await menuItemModel.findByIdAndDelete(id);
+  if (!menuItem) {
+    throw new ApiError(404, "Menu item not found");
+  }
+  if (menuItem.image) {
+    // deleteImage is a utility function to remove the image from cloud storage
+    await deleteImage(menuItem.image);
+  }
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Menu item removed successfully", menuItem));
+});
+
+export { addMenuItem, getAllMenuItems, editMenuItem, removeMenuItem };
