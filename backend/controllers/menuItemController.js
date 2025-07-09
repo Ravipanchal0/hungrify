@@ -15,8 +15,10 @@ const addMenuItem = asyncHandler(async (req, res) => {
   if (!name || !price || !description || !category) {
     throw new ApiError(400, "Please fill all the fields");
   }
-
-  const imageUrl = await uploadImage(imageLocalPath);
+  var imageUrl;
+  if (imageLocalPath) {
+    imageUrl = await uploadImage(imageLocalPath);
+  }
 
   const menuItem = await menuItemModel.create({
     name,
