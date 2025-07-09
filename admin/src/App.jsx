@@ -4,13 +4,13 @@ import { Navbar, Sidebar } from "./components";
 
 function App() {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="App relative">
+      <main className="App flex flex-1">
         <Sidebar />
         <Outlet />
       </main>
-    </>
+    </div>
   );
 }
 

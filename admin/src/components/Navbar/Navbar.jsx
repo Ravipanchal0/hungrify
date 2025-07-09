@@ -4,7 +4,7 @@ import { assets } from "../../assets/assets.js"; // Adjust the import path as ne
 
 const Navbar = () => {
   return (
-    <div className="navbar-container flex items-center justify-between px-6 md:px-8 py-2 bg-white shadow">
+    <div className="navbar-container flex items-center justify-between px-6 md:px-8 py-1 bg-white shadow">
       <div className="logo">
         <h1 className="logo-text text-xl md:text-3xl text-orange-500 font-bold font-quicksand">
           hungrify

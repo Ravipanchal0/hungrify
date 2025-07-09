@@ -1,15 +1,13 @@
-import React from "react";
-
+import { NavLink } from "react-router-dom";
 import { FaClipboardList } from "react-icons/fa";
 import { IoAddCircle } from "react-icons/io5";
 import { MdViewList } from "react-icons/md";
-import { NavLink } from "react-router-dom";
 import { RiDashboardFill } from "react-icons/ri";
 
 const Sidebar = () => {
   return (
-    <div className="sidebar-container w-24 md:w-64 min-h-screen bg-white text-slate-800 shadow">
-      <div className="sidebar-options flex flex-col gap-6 pt-8 pl-8">
+    <div className="sidebar-container w-20 md:w-1/5  lg:w-1/6 min-h-full bg-white text-slate-800 shadow">
+      <div className="sidebar-options flex flex-col gap-6 pt-10 pl-8">
         <NavLink
           to="/"
           className={({ isActive }) =>
@@ -29,6 +27,7 @@ const Sidebar = () => {
             Dashboard
           </span>
         </NavLink>
+
         <NavLink
           to="/add"
           className={({ isActive }) =>
