@@ -1,18 +1,15 @@
+import { Outlet } from "react-router-dom";
 import "./App.css";
+import { Navbar, Sidebar } from "./components";
 
 function App() {
   return (
     <>
-      <h1 className="text-3xl font-bold">
-        {" "}
-        <span className="logo font-quicksand font-bold italic text-icon">
-          hungrify,{" "}
-        </span>
-        Welcome to the Admin Panel
-      </h1>
-      <p className="text-lg">
-        Manage your application settings and user accounts from this panel.
-      </p>
+      <Navbar />
+      <main className="App relative">
+        <Sidebar />
+        <Outlet />
+      </main>
     </>
   );
 }
