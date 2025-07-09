@@ -11,7 +11,7 @@ import deleteImage from "../utils/deleteImage.js";
 const addMenuItem = asyncHandler(async (req, res) => {
   const { name, price, description, category, discount } = req.body;
   const imageLocalPath = req.file ? req.file.path : null;
-
+  console.log(req.body, imageLocalPath);
   if (!name || !price || !description || !category) {
     throw new ApiError(400, "Please fill all the fields");
   }

@@ -20,25 +20,28 @@ const Home = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-    if (file) {
-      setFormData((prev) => ({
-        ...prev,
-        image: file,
-      }));
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await addItem(formData);
-    console.log(response);
-    // if (response.data.success) {
-    //   setFormData(initialFormData);
-    // }
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("description", formData.description);
+    formDataToSend.append("price", formData.price);
+    formDataToSend.append("discount", formData.discount);
+    formDataToSend.append("category", formData.category);
+    formDataToSend.append("isAvailable", formData.isAvailable);
+    formDataToSend.append("image", formData.image); // ✅ important!
+
+    try {
+      const response = await addItem(formDataToSend);
+      console.log("✅ Success:", response.data);
+
+      // Reset form after success
+      setFormData(initialFormData);
+      setImage(false);
+    } catch (error) {
+      console.error("❌ Upload failed:", error.message);
+    }
   };
 
   return (
@@ -94,7 +97,7 @@ const Home = () => {
             id="item-img"
             accept="image/*"
             hidden
-            onChange={handleImageChange}
+            onChange={(e) => setImage(e.target.files[0])}
           />
         </div>
 
