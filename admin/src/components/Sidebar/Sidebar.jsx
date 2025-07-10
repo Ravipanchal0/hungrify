@@ -6,7 +6,7 @@ import { RiDashboardFill } from "react-icons/ri";
 
 const Sidebar = () => {
   return (
-    <div className="sidebar-container w-20 md:w-1/5  lg:w-1/6 min-h-full bg-white text-slate-800 shadow">
+    <div className="sidebar-container z-50 w-20 md:w-1/5  lg:w-1/6 min-h-full bg-white text-slate-800 shadow">
       <div className="sidebar-options flex flex-col gap-6 pt-10 pl-8">
         <NavLink
           to="/"
