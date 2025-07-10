@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BiImageAdd } from "react-icons/bi";
 import { addItem } from "../controller/itemController";
+import { toast } from "react-toastify";
 
 const Home = () => {
   const initialFormData = {
@@ -10,37 +11,38 @@ const Home = () => {
     price: "",
     discount: "",
     category: "",
-    image: null,
   };
 
   const [image, setImage] = useState(false);
-  const [formData, setFormData] = useState(initialFormData);
+  const [data, setData] = useState(initialFormData);
 
   const handleOnChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setData((data) => ({ ...data, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formDataToSend = new FormData();
-    formDataToSend.append("name", formData.name);
-    formDataToSend.append("description", formData.description);
-    formDataToSend.append("price", formData.price);
-    formDataToSend.append("discount", formData.discount);
-    formDataToSend.append("category", formData.category);
-    formDataToSend.append("isAvailable", formData.isAvailable);
-    formDataToSend.append("image", formData.image); // ✅ important!
+    formDataToSend.append("name", data.name);
+    formDataToSend.append("description", data.description);
+    formDataToSend.append("price", data.price);
+    formDataToSend.append("discount", data.discount);
+    formDataToSend.append("category", data.category);
+    formDataToSend.append("isAvailable", data.isAvailable);
+    formDataToSend.append("image", image); // ✅ important!
 
     try {
       const response = await addItem(formDataToSend);
-      console.log("✅ Success:", response.data);
-
-      // Reset form after success
-      setFormData(initialFormData);
-      setImage(false);
+      console.log("Success:", response.data);
+      if (response?.data?.success) {
+        toast.success(response.data.message);
+        // Reset form after success
+        setData(initialFormData);
+        setImage(false);
+      }
     } catch (error) {
-      console.error("❌ Upload failed:", error.message);
+      toast.error(error.message);
     }
   };
 
@@ -62,7 +64,7 @@ const Home = () => {
           <select
             name="isAvailable"
             id="availability"
-            value={formData.isAvailable}
+            value={data.isAvailable}
             onChange={handleOnChange}
             className="px-3 py-2 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
             required
@@ -113,7 +115,7 @@ const Home = () => {
             type="text"
             name="name"
             id="item-name"
-            value={formData.name}
+            value={data.name}
             required
             onChange={handleOnChange}
             placeholder="Ex. Veg Roll"
@@ -132,7 +134,7 @@ const Home = () => {
           <textarea
             name="description"
             id="item-desc"
-            value={formData.description}
+            value={data.description}
             onChange={handleOnChange}
             required
             placeholder="Ex. Tasty and stuffed veg rolls, perfect for snacking."
@@ -154,7 +156,7 @@ const Home = () => {
               type="number"
               name="price"
               id="item-price"
-              value={formData.price}
+              value={data.price}
               onChange={handleOnChange}
               required
               placeholder="Enter price"
@@ -175,7 +177,7 @@ const Home = () => {
               type="number"
               name="discount"
               id="item-discount"
-              value={formData.discount}
+              value={data.discount}
               onChange={handleOnChange}
               placeholder="Enter discount price"
               min="0"
@@ -197,7 +199,7 @@ const Home = () => {
             name="category"
             id="category"
             onChange={handleOnChange}
-            value={formData.category}
+            value={data.category}
             required
             className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
           >

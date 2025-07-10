@@ -11,9 +11,13 @@ import deleteImage from "../utils/deleteImage.js";
 const addMenuItem = asyncHandler(async (req, res) => {
   const { name, price, description, category, discount } = req.body;
   const imageLocalPath = req.file ? req.file.path : null;
-  console.log(req.body, imageLocalPath);
+
   if (!name || !price || !description || !category) {
     throw new ApiError(400, "Please fill all the fields");
+  }
+
+  if (!imageLocalPath) {
+    throw new ApiError(400, "Image is required!");
   }
   var imageUrl;
   if (imageLocalPath) {
@@ -40,11 +44,6 @@ const addMenuItem = asyncHandler(async (req, res) => {
 const getAllMenuItems = asyncHandler(async (req, res) => {
   const menuItems = await menuItemModel.find({});
 
-  if (!menuItems || menuItems.length === 0) {
-    res
-      .status(200)
-      .json(new ApiResponse(200, "No menu items found", menuItems));
-  }
   res
     .status(200)
     .json(new ApiResponse(200, "Menu items fetched successfully", menuItems));
