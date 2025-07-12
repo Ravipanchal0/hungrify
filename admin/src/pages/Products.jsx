@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { fetchMenuItems } from "../controller/itemController.js";
+import {
+  fetchMenuItems,
+  deleteMenuItem,
+  updateMenuAvailability,
+} from "../controller/itemController.js";
 import { MdDelete } from "react-icons/md";
 import { MdEditSquare } from "react-icons/md";
 
-import { assets } from "../assets/assets.js";
+import { toast } from "react-toastify";
 
 const Products = () => {
   const [list, setList] = useState([]);
@@ -14,6 +18,41 @@ const Products = () => {
     const response = await fetchMenuItems();
     if (response) {
       setList(response.data);
+    }
+  };
+
+  const handleAvailabilityChange = async (e, itemId) => {
+    const newAvailability = e.target.value;
+
+    // Call backend
+    const response = await updateMenuAvailability(itemId, newAvailability);
+
+    if (response.success) {
+      toast.success("Availability updated");
+      fetchMenu();
+    } else {
+      toast.error("Failed to update availability");
+      fetchMenu();
+    }
+  };
+
+  const handleEdit = (itemId) => {
+    console.log(itemId);
+    console.log(availability);
+  };
+
+  const handleDelete = async (itemId) => {
+    try {
+      const response = await deleteMenuItem(itemId);
+
+      if (response.success) {
+        toast.success("Item deleted successfully.");
+        fetchMenu();
+      } else {
+        toast.error("Could not delete the item.");
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
     }
   };
 
@@ -29,129 +68,75 @@ const Products = () => {
           Hi, Ravi Panchal. Welcome back to Hungrify Admin!
         </p>
       </div>
-      <div className="menu-display overflow-y-auto">
-        <div class="relative overflow-x-auto shadow-md sm:rounded-md">
-          {/* <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-            <thead class="text-xs text-gray-700 uppercase bg-white border-b border-b-gray-500">
-              <tr>
-                <th scope="col" class="px-6 py-3">
-                  Image
-                </th>
-                <th scope="col" class="px-6 py-3">
-                  Food name
-                </th>
-                <th scope="col" class="px-6 py-3">
-                  Category
-                </th>
-                <th scope="col" class="px-6 py-3">
-                  Price
-                </th>
-                <th scope="col" class="px-6 py-3">
-                  Discount(%)
-                </th>
-                <th scope="col" class="px-6 py-3">
-                  Action
-                </th>
-              </tr>
-            </thead>
+      <div className="menu-display">
+        <div className="Product-list shadow rounded">
+          {/* Header Row */}
+          <div className="header grid grid-cols-[2.5fr_2fr_1.5fr_1.2fr_1.2fr_1fr_1.5fr] font-medium border-b border-b-gray-300 p-4 bg-slate-100 text-gray-700">
+            <div className="">Image</div>
+            <div className="">Name</div>
+            <div className="">Category</div>
+            <div>Price</div>
+            <div>Discount</div>
+            <div>Action</div>
+            <div>Avaibility</div>
+          </div>
 
-            <tbody className="overflow-auto">
-              {!list.length && (
-                <div className="text-2xl m-22">
-                  <p className="text-gray-800">Sorry!</p>
-                  <p className="text-sm">No menus available</p>
-                </div>
-              )}
-              {list.map((item) => {
-                return (
-                  <tr key={item._id} class=" bg-white border-b border-gray-200">
-                    <th scope="row" class="p-4">
-                      <img src={item.image} alt={item.name} width={100} />
-                    </th>
-                    <th
-                      scope="row"
-                      class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+          {/* Data Rows Container */}
+          <div className="data overflow-y-auto max-h-[64vh]">
+            {/* One data row */}
+            {list.map((item) => {
+              return (
+                <div
+                  key={item._id}
+                  className={`data-content grid grid-cols-[2.5fr_2fr_1.5fr_1.2fr_1.2fr_1fr_1.5fr] items-center p-4 border-b border-b-gray-200 ${
+                    !item.isAvailable ? "bg-red-50 text-gray-500" : ""
+                  }`}
+                >
+                  <div className="img">
+                    <img
+                      src={item.image}
+                      alt="product"
+                      className="max-w-22 object-cover rounded"
+                    />
+                  </div>
+                  <div className="text-gray-800 ml-1">{item.name}</div>
+                  <div className="text-gray-600 ml-2">{item.category}</div>
+                  <div className="text-gray-600 ml-2">
+                    &#x20B9; {item.price}
+                  </div>
+                  <div className="text-gray-600 ml-2">{item.discount}</div>
+                  <div className="action flex gap-x-5 ml-2">
+                    <button
+                      onClick={() => handleEdit(item._id)}
+                      className="text-blue-500 text-2xl cursor-pointer hover:text-blue-400"
                     >
-                      {item.name}
-                    </th>
-                    <td class="px-6 py-4">{item.category}</td>
-                    <td class="px-6 py-4">&#x20B9;{item.price}</td>
-                    <td class="px-6 py-4">{item.discount}%</td>
-                    <td class="px-6 py-4 flex items-center">
-                      <NavLink
-                        to="#"
-                        class="font-medium text-gray-500 hover:underline"
-                      >
-                        <MdEditSquare size={24} />
-                      </NavLink>
-                      <NavLink
-                        to="#"
-                        class="font-medium text-red-500 hover:underline"
-                      >
-                        <MdDelete size={24} />
-                      </NavLink>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table> */}
-
-          <div className="Product-list">
-            {/* Header Row */}
-            <div className="header grid grid-cols-layout font-bold border-b py-3 bg-gray-100">
-              <p>Image</p>
-              <p>Name</p>
-              <p>Price</p>
-              <p>Discount</p>
-              <p>Category</p>
-              <p>Action</p>
-            </div>
-
-            {/* Data Rows Container */}
-            <div className="data overflow-y-auto max-h-[80vh]">
-              {/* One data row */}
-              <div className="data-content grid grid-cols-layout items-center gap-4 py-4 border-b">
-                <img
-                  src="https://via.placeholder.com/80"
-                  alt="product"
-                  className="w-24 h-16 object-cover"
-                />
-                <p>Cool T-Shirt</p>
-                <p>$19.99</p>
-                <p>10%</p>
-                <p>Clothing</p>
-                <div className="action flex gap-3">
-                  <button className="text-blue-600 hover:underline">
-                    Edit
-                  </button>
-                  <button className="text-red-500 hover:underline">
-                    Delete
-                  </button>
+                      <MdEditSquare />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item._id)}
+                      className="text-red-500 text-2xl cursor-pointer hover:text-red-400"
+                    >
+                      <MdDelete />
+                    </button>
+                  </div>
+                  <div className="availability">
+                    <select
+                      name="isAvailable"
+                      value={item.isAvailable}
+                      onChange={(e) => handleAvailabilityChange(e, item._id)}
+                      className={`px-2 py-1.5 border rounded-md text-sm focus:outline-none focus:ring-2 ${
+                        item.isAvailable
+                          ? "border-green-400 ring-green-200"
+                          : "border-red-400 ring-red-200"
+                      }`}
+                    >
+                      <option value="true">Available</option>
+                      <option value="false">Not Available</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
-
-              {/* Another data row (repeat as needed) */}
-              <div className="data-content grid grid-cols-layout items-center gap-4 py-4 border-b">
-                <img
-                  src="https://via.placeholder.com/80"
-                  alt="product"
-                  className="w-24 h-16 object-cover"
-                />
-                <p>Classic Jeans</p>
-                <p>$39.99</p>
-                <p>15%</p>
-                <p>Denim</p>
-                <div className="action flex gap-3">
-                  <button className="text-blue-600 hover:underline">
-                    Edit
-                  </button>
-                  <button className="text-red-500 hover:underline">
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>

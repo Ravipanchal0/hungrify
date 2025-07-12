@@ -9,7 +9,8 @@ import deleteImage from "../utils/deleteImage.js";
 // @route   POST /api/menuitmes/add
 // @access  Private/Admin
 const addMenuItem = asyncHandler(async (req, res) => {
-  const { name, price, description, category, discount } = req.body;
+  const { name, price, description, category, discount, isAvailable } =
+    req.body;
   const imageLocalPath = req.file ? req.file.path : null;
 
   if (!name || !price || !description || !category) {
@@ -31,6 +32,7 @@ const addMenuItem = asyncHandler(async (req, res) => {
     category,
     image: imageUrl.url || null,
     discount: discount ? parseFloat(discount) : 0,
+    isAvailable,
   });
 
   res
@@ -65,6 +67,28 @@ const getMenuItemById = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Menu item fetched successfully", menuItem));
 });
 
+// @desc    edit availability of a menu item
+// @route   GET /api/menuitme/edit/:id/availability
+// @access  Private/Admin
+const itemAvailability = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { isAvailable } = req.body;
+
+  const menuItem = await menuItemModel.findByIdAndUpdate(
+    id,
+    { isAvailable },
+    { new: true }
+  );
+
+  if (!menuItem) {
+    throw new ApiError(404, "Menu item not found");
+  }
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Availability updated successfully", menuItem));
+});
+
 // @desc    edit details of a menu item
 // @route   GET /api/menuitme/edit/:id
 // @access  Private/Admin
@@ -73,7 +97,12 @@ const editMenuItem = asyncHandler(async (req, res) => {
   const { name, price, description, category, discount, isAvailable } =
     req.body;
 
+  if (!name || !price || !description || !category) {
+    throw new ApiError(400, "Please fill all the fields");
+  }
+
   const menuItem = await menuItemModel.findById(id);
+
   if (!menuItem) {
     throw new ApiError(404, "Menu item not found");
   }
@@ -81,14 +110,11 @@ const editMenuItem = asyncHandler(async (req, res) => {
   const updatedData = await menuItemModel.findByIdAndUpdate(
     id,
     {
-      name: name || menuItem.name,
-      price: price || menuItem.price,
-      description: description || menuItem.description,
-      category: category || menuItem.category,
-      discount:
-        discount !== undefined && discount !== null
-          ? parseFloat(discount)
-          : menuItem.discount,
+      name: name,
+      price: price,
+      description: description,
+      category: category,
+      discount: parseFloat(discount),
       isAvailable:
         typeof isAvailable === "boolean" ? isAvailable : menuItem.isAvailable,
     },
@@ -131,4 +157,5 @@ export {
   getMenuItemById,
   editMenuItem,
   removeMenuItem,
+  itemAvailability,
 };

@@ -34,7 +34,6 @@ const Home = () => {
 
     try {
       const response = await addItem(formDataToSend);
-      console.log("Success:", response.data);
       if (response?.data?.success) {
         toast.success(response.data.message);
         // Reset form after success
