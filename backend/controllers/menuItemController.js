@@ -90,12 +90,11 @@ const itemAvailability = asyncHandler(async (req, res) => {
 });
 
 // @desc    edit details of a menu item
-// @route   GET /api/menuitme/edit/:id
+// @route   PUT /api/menuitme/edit/:id
 // @access  Private/Admin
 const editMenuItem = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { name, price, description, category, discount, isAvailable } =
-    req.body;
+  const { name, price, description, category, discount } = req.body;
 
   if (!name || !price || !description || !category) {
     throw new ApiError(400, "Please fill all the fields");
@@ -114,9 +113,7 @@ const editMenuItem = asyncHandler(async (req, res) => {
       price: price,
       description: description,
       category: category,
-      discount: parseFloat(discount),
-      isAvailable:
-        typeof isAvailable === "boolean" ? isAvailable : menuItem.isAvailable,
+      discount: discount,
     },
     { new: true }
   );

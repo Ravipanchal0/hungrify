@@ -5,4 +5,16 @@
   --font-outfit: "Outfit", sans-serif;
   --font-quicksand: "Quicksand", sans-serif;
   --color-icon: #ff4c24;
+  --animate-zoom: zoom 0.2s ease-in-out forwards;
+}
+
+@keyframes zoom {
+  0% {
+    transform: scale(0.3);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

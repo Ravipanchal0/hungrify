@@ -15,7 +15,7 @@ router.route("/menulist").get(getAllMenuItems);
 router.route("/menulist/:id").get(getMenuItemById);
 router.route("/add").post(upload.single("image"), addMenuItem);
 router.route("/delete/:id").delete(removeMenuItem);
-router.route("/edit/:id").patch(editMenuItem);
-router.route("/edit/:id/availability").put(itemAvailability);
+router.route("/edit/:id").put(editMenuItem);
+router.route("/edit/:id/availability").patch(itemAvailability);
 
 export default router;

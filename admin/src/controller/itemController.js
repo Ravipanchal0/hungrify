@@ -31,6 +31,21 @@ const fetchMenuItems = async () => {
   }
 };
 
+//Fetch item by id
+const getItemById = async (itemId) => {
+  try {
+    const response = await axios.get(
+      `${baseUrl}/api/menuitem/menulist/${itemId}`
+    );
+    return response.data.data;
+  } catch (error) {
+    const errorMessage =
+      err.response?.data?.message || "Something went wrong. Try again.";
+    throw new Error(errorMessage);
+  }
+};
+
+//Delete item
 const deleteMenuItem = async (id) => {
   try {
     const response = await axios.delete(`${baseUrl}/api/menuitem/delete/${id}`);
@@ -42,10 +57,10 @@ const deleteMenuItem = async (id) => {
   }
 };
 
-// itemController.js
+//Update availability
 const updateMenuAvailability = async (itemId, isAvailable) => {
   try {
-    const res = await axios.put(
+    const res = await axios.patch(
       `${baseUrl}/api/menuitem/edit/${itemId}/availability`,
       {
         isAvailable,
@@ -59,4 +74,26 @@ const updateMenuAvailability = async (itemId, isAvailable) => {
   }
 };
 
-export { addItem, fetchMenuItems, deleteMenuItem, updateMenuAvailability };
+//edit item details
+const editItemDetails = async (itemId, formData) => {
+  try {
+    const response = await axios.put(
+      `${baseUrl}/api/menuitem/edit/${itemId}`,
+      formData
+    );
+    return response.data;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || "Something went wrong. Try again.";
+    throw new Error(errorMessage);
+  }
+};
+
+export {
+  addItem,
+  fetchMenuItems,
+  deleteMenuItem,
+  updateMenuAvailability,
+  getItemById,
+  editItemDetails,
+};
