@@ -32,16 +32,41 @@ const Home = () => {
     formDataToSend.append("isAvailable", data.isAvailable);
     formDataToSend.append("image", image); // ✅ important!
 
+    // Show loading toast
+    const toastId = toast.loading("Adding item");
+
     try {
       const response = await addItem(formDataToSend);
+
       if (response?.data?.success) {
-        toast.success(response.data.message);
+        toast.update(toastId, {
+          render: response.data.message,
+          type: "success",
+          isLoading: false,
+          autoClose: 1000,
+          closeOnClick: true,
+        });
+
         // Reset form after success
         setData(initialFormData);
         setImage(false);
+      } else {
+        toast.update(toastId, {
+          render: "Failed to add item",
+          type: "error",
+          isLoading: false,
+          autoClose: 2000,
+          closeOnClick: true,
+        });
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.update(toastId, {
+        render: error.message || "Something went wrong",
+        type: "error",
+        isLoading: false,
+        autoClose: 2000,
+        closeOnClick: true,
+      });
     }
   };
 

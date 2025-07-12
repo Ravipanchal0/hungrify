@@ -23,16 +23,34 @@ const Products = () => {
 
   const handleAvailabilityChange = async (e, itemId) => {
     const newAvailability = e.target.value;
+    const toastId = toast.loading("Updating availability");
 
-    // Call backend
-    const response = await updateMenuAvailability(itemId, newAvailability);
-
-    if (response.success) {
-      toast.success("Availability updated");
-      fetchMenu();
-    } else {
-      toast.error("Failed to update availability");
-      fetchMenu();
+    try {
+      const response = await updateMenuAvailability(itemId, newAvailability);
+      if (response.success) {
+        toast.update(toastId, {
+          render: "Availability updated",
+          type: "success",
+          isLoading: false,
+          autoClose: 1000,
+        });
+        fetchMenu();
+      } else {
+        toast.update(toastId, {
+          render: "Failed to update availability",
+          type: "error",
+          isLoading: false,
+          autoClose: 1000,
+        });
+        fetchMenu();
+      }
+    } catch (error) {
+      toast.update(toastId, {
+        render: "Something went wrong",
+        type: "error",
+        isLoading: false,
+        autoClose: 1000,
+      });
     }
   };
 
@@ -42,17 +60,32 @@ const Products = () => {
   };
 
   const handleDelete = async (itemId) => {
+    const toastId = toast.loading("Deleting item");
     try {
       const response = await deleteMenuItem(itemId);
-
       if (response.success) {
-        toast.success("Item deleted successfully.");
+        toast.update(toastId, {
+          render: "Item deleted successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 1000,
+        });
         fetchMenu();
       } else {
-        toast.error("Could not delete the item.");
+        toast.update(toastId, {
+          render: "Could not delete the item",
+          type: "error",
+          isLoading: false,
+          autoClose: 1000,
+        });
       }
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.update(toastId, {
+        render: "Something went wrong",
+        type: "error",
+        isLoading: false,
+        autoClose: 1000,
+      });
     }
   };
 
