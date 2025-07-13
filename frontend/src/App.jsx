@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { Outlet } from "react-router-dom";
 import "./App.css";
 import { Navbar, Footer, LoginModal } from "./components/index.js";
+import { ToastContainer } from "react-toastify";
+import { StoreContext } from "./context/StoreContext.jsx";
 
 function App() {
-  const [showLogin, setShowLogin] = useState(false);
+  const { showLogin, setShowLogin } = useContext(StoreContext);
   return (
     <>
-      {showLogin && <LoginModal setShowLogin={setShowLogin} />}
+      <ToastContainer />
+      {showLogin && <LoginModal />}
 
       <div className="min-h-screen flex flex-col">
         <Navbar setShowLogin={setShowLogin} />
