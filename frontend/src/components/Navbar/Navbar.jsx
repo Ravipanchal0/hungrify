@@ -12,8 +12,16 @@ import { StoreContext } from "../../context/StoreContext.jsx";
 
 const Navbar = ({ setShowLogin }) => {
   const navigate = useNavigate();
-  const { getTotalCartAmount } = useContext(StoreContext);
+  const { getTotalCartAmount, token, setToken, user, setUser } =
+    useContext(StoreContext);
   const total = parseInt(getTotalCartAmount());
+
+  const handleLogout = async () => {
+    localStorage.removeItem("token");
+    setToken("");
+    setUser({});
+    navigate("/");
+  };
 
   return (
     <header className="min-w-full sticky top-0 z-100 md:backdrop-blur-md bg-amber-100  md:bg-amber-100/50">
@@ -134,17 +142,49 @@ const Navbar = ({ setShowLogin }) => {
               }
             ></div>
           </NavLink>
-          <button
-            onClick={() => setShowLogin(true)}
-            className="sign-in "
-            title="Sign in"
-          >
-            <FaSignInAlt
-              size={24}
-              className="text-[#bc6429] transition duration-150 cursor-pointer hover:transform hover:translate-x-0.5 hover:text-orange-500"
-            />
-          </button>
-          {/* <div className="profile size-10 rounded-full ring-1 ring-[#7d390c]"></div> */}
+          {token ? (
+            <div className="relative">
+              <div className="peer flex justify-center items-center text-2xl font-semibold font-quicksand text-gray-50 size-10 rounded-full bg-amber-500 cursor-pointer">
+                {user?.name?.charAt(0)?.toUpperCase()}
+              </div>
+
+              {/* Dropdown Box visible on peer-hover or hover */}
+              <div className="absolute w-30 right-0 top-13 hidden peer-hover:flex hover:flex flex-col items-center justify-center gap-y-3 bg-white p-4 shadow-md z-50 rounded">
+                {/* Triangle */}
+                <div className="w-0 h-0 absolute -top-3 right-2 border-l-[12px] border-l-transparent border-b-[14px] border-b-white border-r-[12px] border-r-transparent"></div>
+
+                <NavLink
+                  to="/profile"
+                  className="text-gray-700 hover:text-amber-500 transition"
+                >
+                  Profile
+                </NavLink>
+                <NavLink
+                  to="/profile"
+                  className="text-gray-700 hover:text-amber-500 transition"
+                >
+                  My Order
+                </NavLink>
+                <button
+                  onClick={handleLogout}
+                  className="text-gray-700 hover:text-amber-500 transition cursor-pointer"
+                >
+                  Log out
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowLogin(true)}
+              className="sign-in "
+              title="Sign in"
+            >
+              <FaSignInAlt
+                size={24}
+                className="text-[#bc6429] transition duration-150 cursor-pointer hover:transform hover:translate-x-0.5 hover:text-orange-500"
+              />
+            </button>
+          )}
         </div>
       </div>
     </header>

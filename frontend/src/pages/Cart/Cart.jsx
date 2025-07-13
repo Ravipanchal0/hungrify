@@ -2,6 +2,8 @@ import React, { useContext, useState } from "react";
 import { StoreContext } from "../../context/StoreContext";
 import { IoMdAdd, IoMdRemove, MdDelete } from "../../assets/icons.js";
 import { useNavigate } from "react-router-dom";
+import { assets } from "../../assets/assets.js";
+import { LoginModal } from "../../components/index.js";
 
 const Cart = () => {
   const [couponAmount, setCouponAmount] = useState(0);
@@ -13,11 +15,15 @@ const Cart = () => {
     removeFromCart,
     deleteFromCart,
     getTotalCartAmount,
+    showLogin,
+    setShowLogin,
+    token,
   } = useContext(StoreContext);
   let totalAmount = getTotalCartAmount();
   let totalPayable = Math.round(
     parseFloat(totalAmount) - parseFloat(couponAmount)
   );
+
   return totalAmount > 0 ? (
     <div className="cart-page md:max-w-10/12 mx-auto md:my-10 px-3">
       <div className="cart-items">
@@ -124,9 +130,33 @@ const Cart = () => {
       </div>
     </div>
   ) : (
-    <div className="empty-cart flex-1/2 text-center py-10">
-      <p className="text-lg font-medium">Your cart is empty</p>
-    </div>
+    <>
+      {showLogin && <LoginModal />}
+      <div className="empty-cart flex flex-col gap-y-8 items-center flex-1/2 text-center py-5">
+        <div className="img flex flex-col justify-center items-center gap-y-2">
+          <img src={assets.empty_cart} alt="" className="max-w-56" />
+          <p className="text-xl text-gray-600 font-medium">
+            Your hungrify cart is empty
+          </p>
+        </div>
+        {!token && (
+          <div className="authentication flex flex-col items-center gap-y-2 w-64">
+            <button
+              onClick={() => setShowLogin(true)}
+              className="w-full py-2 rounded-full bg-amber-500 cursor-pointer hover:bg-amber-500/90 text-white transition duration-150"
+            >
+              Sign in to your account
+            </button>
+            <button
+              onClick={() => setShowLogin(true)}
+              className="w-full py-1.5 rounded-full border-2 border-amber-500 cursor-pointer hover:bg-amber-500/30  transition duration-150"
+            >
+              Sign up now
+            </button>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
