@@ -1,6 +1,5 @@
 import userModel from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
-import jwt from "jsonwebtoken";
 import validator from "validator";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
@@ -79,11 +78,9 @@ const register = asyncHandler(async (req, res) => {
   );
 });
 
-// @desc    logout user
-// @route   POST /api/user/logout
+// @desc    get user by token
+// @route   POST /api/user/token
 // @access  private/user
-const logout = asyncHandler(async (req, res) => {});
-
 const getUserByToken = asyncHandler(async (req, res) => {
   const { token } = req.body;
   if (!token) {
@@ -100,4 +97,4 @@ const getUserByToken = asyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, "User fetched successfully", user));
 });
 
-export { login, logout, register, getUserByToken };
+export { login, register, getUserByToken };
