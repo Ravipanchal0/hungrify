@@ -1,6 +1,12 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, lazy } from "react";
 import { getUserByToken } from "../api/authApi.js";
 import { getMenuList } from "../api/menuApi.js";
+import {
+  addItemToCart,
+  removeItemFromCart,
+  deleteItemFromCart,
+  getCartItems,
+} from "../api/cartApi.js";
 
 export const StoreContext = createContext();
 
@@ -12,22 +18,31 @@ const StoreContextProvider = ({ children }) => {
   const [food_list, setFood_list] = useState([]);
 
   //Add item into cart
-  const addToCart = (itemId) => {
+  const addToCart = async (itemId) => {
     if (!cartItems[itemId]) {
       setCartItems((prev) => ({ ...prev, [itemId]: 1 }));
     } else {
       setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
     }
+    if (token) {
+      await addItemToCart(itemId, token);
+    }
   };
 
   //Remove item quantity from cart
-  const removeFromCart = (itemId) => {
+  const removeFromCart = async (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+    if (token) {
+      await removeItemFromCart(itemId, token);
+    }
   };
 
   //Delete item from cart
-  const deleteFromCart = (itemId) => {
+  const deleteFromCart = async (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: 0 }));
+    if (token) {
+      await deleteItemFromCart(itemId, token);
+    }
   };
 
   //Calculating order amount
@@ -46,18 +61,27 @@ const StoreContextProvider = ({ children }) => {
       setToken(incomingToken);
       const user = await getUserByToken(incomingToken);
       setUser(user.data);
+      await loadCartData(incomingToken);
     }
   };
 
+  //get cart items
+  const loadCartData = async (token) => {
+    const res = await getCartItems(token);
+    setCartItems(res.data);
+  };
+
   //Get item list
-  const getItemList = async () => {
+  const loadItemList = async () => {
     const itemList = await getMenuList();
     setFood_list(itemList);
   };
 
   useEffect(() => {
-    getItemList();
-    refreshToken();
+    (async function () {
+      await loadItemList();
+      await refreshToken();
+    })();
   }, []);
 
   const contextValue = {
@@ -74,6 +98,7 @@ const StoreContextProvider = ({ children }) => {
     setUser,
     showLogin,
     setShowLogin,
+    loadCartData,
   };
 
   return (

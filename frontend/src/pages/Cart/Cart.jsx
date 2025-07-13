@@ -48,7 +48,7 @@ const Cart = () => {
                   className="w-16 rounded object-cover"
                 />
                 <p>{item.name}</p>
-                <p>&#x20B9; {item.discount_price}</p>
+                <p>&#x20B9; {item.price}</p>
                 <div className="quantity flex items-center justify-center gap-x-2">
                   <button
                     className="rounded border-2 border-icon p-1"
@@ -64,7 +64,7 @@ const Cart = () => {
                     <IoMdAdd className="text-icon" />
                   </button>
                 </div>
-                <p>&#x20B9; {item.discount_price * cartItems[item._id]}</p>
+                <p>&#x20B9; {item.price * cartItems[item._id]}</p>
                 <button
                   onClick={() => deleteFromCart(item._id)}
                   className="flex items-center justify-center p-1"

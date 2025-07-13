@@ -7,7 +7,8 @@ import { StoreContext } from "../../context/StoreContext.jsx";
 
 const LoginModal = () => {
   const [currentState, setCurrentState] = useState("Login");
-  const { setToken, setUser, setShowLogin } = useContext(StoreContext);
+  const { setToken, setUser, setShowLogin, loadCartData } =
+    useContext(StoreContext);
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -36,7 +37,7 @@ const LoginModal = () => {
           setToken(res.data.token);
           setUser(res.data.user);
           localStorage.setItem("token", res.data.token);
-
+          await loadCartData(res.data.token);
           setShowLogin(false);
         }
       }

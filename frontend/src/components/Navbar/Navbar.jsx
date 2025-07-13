@@ -12,7 +12,7 @@ import { StoreContext } from "../../context/StoreContext.jsx";
 
 const Navbar = ({ setShowLogin }) => {
   const navigate = useNavigate();
-  const { getTotalCartAmount, token, setToken, user, setUser } =
+  const { getTotalCartAmount, token, setToken, user, setUser, setCartItems } =
     useContext(StoreContext);
   const total = parseInt(getTotalCartAmount());
 
@@ -20,6 +20,7 @@ const Navbar = ({ setShowLogin }) => {
     localStorage.removeItem("token");
     setToken("");
     setUser({});
+    setCartItems({});
     navigate("/");
   };
 
