@@ -3,8 +3,7 @@ import { assets } from "../../assets/assets";
 import { StoreContext } from "../../context/StoreContext.jsx";
 
 const FoodItem = (item) => {
-  const { _id, name, discount_price, main_price, description, image } =
-    item.item;
+  const { _id, name, price, discount, description, image } = item.item;
 
   const { cartItems, addToCart, removeFromCart } = useContext(StoreContext);
 
@@ -50,13 +49,20 @@ const FoodItem = (item) => {
         </div>
       </div>
       <div className="food-info mt-3 flex flex-col flex-1">
-        <div className="price flex items-center text-icon gamd:p-x-1 text-sm md:text-lg font-medium">
-          <p className="price">&#x20B9; {discount_price}</p>
-          <p className="main-price">
-            <span className="line-through text-gray-400 text-xs md:text-sm font-normal">
-              {main_price}
-            </span>
+        <div className="price flex items-center text-icon md:gap-x-1 text-sm md:text-lg font-medium">
+          <p className="price">
+            &#x20B9;{" "}
+            {price - parseInt((parseFloat(discount) * parseInt(price)) / 100)}
           </p>
+          {discount ? (
+            <p className="main-price">
+              <span className="line-through text-gray-400 text-xs md:text-sm font-normal">
+                {price}
+              </span>
+            </p>
+          ) : (
+            <div></div>
+          )}
         </div>
         <div className="name-rating md:flex justify-between items-center mb-1">
           <p className="name text-sm md:text-lg font-medium mb-1">{name}</p>

@@ -1,6 +1,4 @@
-import { Link } from "react-scroll";
 import { assets } from "../../assets/assets";
-import { IoArrowDownCircleOutline } from "../../assets/icons";
 
 const Hero = () => {
   return (
@@ -35,20 +33,6 @@ const Hero = () => {
             </button>
           </div>
         </div>
-      </div>
-      <div className="scroll">
-        <Link
-          to="explore-menu"
-          smooth={500}
-          offset={-70}
-          spy={true}
-          className="hidden md:inline-block absolute bottom-10 right-14"
-        >
-          <IoArrowDownCircleOutline
-            // size={40}
-            className="text-icon animate-bounce cursor-pointer size-12"
-          />
-        </Link>
       </div>
     </div>
   );
