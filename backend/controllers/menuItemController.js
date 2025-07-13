@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
-import menuItemModel from "../models/menuItemModel.js";
+import itemModel from "../models/itemModel.js";
 import uploadImage from "../utils/uploadImage.js";
 import deleteImage from "../utils/deleteImage.js";
 
@@ -25,7 +25,7 @@ const addMenuItem = asyncHandler(async (req, res) => {
     imageUrl = await uploadImage(imageLocalPath);
   }
 
-  const menuItem = await menuItemModel.create({
+  const menuItem = await itemModel.create({
     name,
     price,
     description,
@@ -44,7 +44,7 @@ const addMenuItem = asyncHandler(async (req, res) => {
 // @route   GET /api/menuitme/menulist
 // @access  Public
 const getAllMenuItems = asyncHandler(async (req, res) => {
-  const menuItems = await menuItemModel.find({});
+  const menuItems = await itemModel.find({});
 
   res
     .status(200)
@@ -56,7 +56,7 @@ const getAllMenuItems = asyncHandler(async (req, res) => {
 // @access  Public
 const getMenuItemById = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const menuItem = await menuItemModel.findById(id);
+  const menuItem = await itemModel.findById(id);
 
   if (!menuItem) {
     throw new ApiError(404, "Menu item not found");
@@ -74,7 +74,7 @@ const itemAvailability = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { isAvailable } = req.body;
 
-  const menuItem = await menuItemModel.findByIdAndUpdate(
+  const menuItem = await itemModel.findByIdAndUpdate(
     id,
     { isAvailable },
     { new: true }
@@ -100,13 +100,13 @@ const editMenuItem = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Please fill all the fields");
   }
 
-  const menuItem = await menuItemModel.findById(id);
+  const menuItem = await itemModel.findById(id);
 
   if (!menuItem) {
     throw new ApiError(404, "Menu item not found");
   }
 
-  const updatedData = await menuItemModel.findByIdAndUpdate(
+  const updatedData = await itemModel.findByIdAndUpdate(
     id,
     {
       name: name,
@@ -134,7 +134,7 @@ const editMenuItem = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const removeMenuItem = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const menuItem = await menuItemModel.findByIdAndDelete(id);
+  const menuItem = await itemModel.findByIdAndDelete(id);
   if (!menuItem) {
     throw new ApiError(404, "Menu item not found");
   }
