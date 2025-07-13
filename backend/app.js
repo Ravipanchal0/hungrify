@@ -13,12 +13,14 @@ import menuItemRoutes from "./routes/menuItemRoutes.js";
 import authRouter from "./routes/authRouter.js";
 import userRouter from "./routes/userRoutes.js";
 import cartRouter from "./routes/cartRoutes.js";
+import orderRouter from "./routes/orderRoute.js";
 
 //api endpoints
 app.use("/api/menuitem", menuItemRoutes);
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/order", orderRouter);
 
 // Middleware for handling errors
 app.use(errorHandler);

@@ -7,52 +7,37 @@ const orderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    items: [
-      {
-        productId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "MenuItem",
-        },
-        quantity: {
-          type: Number,
-          default: 1,
-        },
-        price: Number,
-      },
-    ],
+    items: { type: Array, required: true },
     totalAmount: {
       type: Number,
       required: true,
     },
     deliveryAddress: {
-      street: String,
-      city: String,
-      state: String,
-      pincode: String,
-      country: String,
+      type: Object,
+      required: true,
     },
     status: {
       type: String,
-      enum: [
-        "pending",
-        "confirmed",
-        "preparing",
-        "on the way",
-        "delivered",
-        "cancelled",
-      ],
+      // enum: [
+      //   "pending",
+      //   "confirmed",
+      //   "preparing",
+      //   "on the way",
+      //   "delivered",
+      //   "cancelled",
+      // ],
       default: "pending",
-    },
-    paymentMethod: {
-      type: String,
-      enum: ["COD", "Online"],
-      default: "COD",
     },
     paymentStatus: {
       type: String,
-      enum: ["pending", "paid"],
+      // enum: ["pending", "paid"],
       default: "pending",
     },
+    // paymentMethod: {
+    //   type: String,
+    //   enum: ["COD", "Online"],
+    //   default: "COD",
+    // },
   },
   { timestamps: true }
 );
