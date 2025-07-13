@@ -11,8 +11,12 @@ app.use(cors());
 
 //api endpoints
 import menuItemRoutes from "./routes/menuItemRoutes.js";
+import authRouter from "./routes/authRouter.js";
+import userRouter from "./routes/userRoutes.js";
 
 app.use("/api/menuitem", menuItemRoutes);
+app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
 
 // Middleware for handling errors
 app.use(errorHandler);
