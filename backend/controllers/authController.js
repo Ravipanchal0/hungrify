@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import validator from "validator";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
-import { generateToken } from "../utils/jwtToken.js";
+import { generateToken, verifyToken } from "../utils/jwtToken.js";
 
 // @desc    login user
 // @route   POST /api/user/login
@@ -51,7 +51,7 @@ const register = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Enter a valid email");
   }
 
-  if (!password.length >= 8) {
+  if (password.length < 8) {
     throw new ApiError(400, "Password should be 8 character");
   }
 
@@ -71,14 +71,12 @@ const register = asyncHandler(async (req, res) => {
 
   const token = generateToken(newUser._id, newUser.email);
 
-  res
-    .status(200)
-    .json(
-      new ApiResponse(201, "Account created successfully", {
-        token,
-        user: newUser,
-      })
-    );
+  res.status(200).json(
+    new ApiResponse(201, "Account created successfully", {
+      token,
+      user: newUser,
+    })
+  );
 });
 
 // @desc    logout user
@@ -86,4 +84,20 @@ const register = asyncHandler(async (req, res) => {
 // @access  private/user
 const logout = asyncHandler(async (req, res) => {});
 
-export { login, logout, register };
+const getUserByToken = asyncHandler(async (req, res) => {
+  const { token } = req.body;
+  if (!token) {
+    throw new ApiError(401, "You are singed out");
+  }
+
+  const decodedToken = verifyToken(token);
+  if (!decodedToken) {
+    throw new ApiError(401, "You are singed out");
+  }
+
+  const user = await userModel.findById(decodedToken.id);
+
+  res.status(200).json(new ApiResponse(200, "User fetched successfully", user));
+});
+
+export { login, logout, register, getUserByToken };
