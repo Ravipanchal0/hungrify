@@ -2,7 +2,7 @@ import ApiError from "../utils/ApiError.js";
 import { verifyToken } from "../utils/jwtToken.js";
 
 const authMiddleware = async (req, _, next) => {
-  const { token } = req.headers;
+  const token = req.headers.token;
   if (!token) {
     throw new ApiError(401, "Unauthorised! Please login");
   }
@@ -11,6 +11,7 @@ const authMiddleware = async (req, _, next) => {
     req.body.userId = decoded_token.id;
     next();
   } catch (error) {
+    console.log(error);
     throw new ApiError(500, error.message);
   }
 };

@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import errorHandler from "./middlewares/errorHandler.js";
+import Razorpay from "razorpay";
 
 const app = express(); // Initialize the Express application
 
@@ -8,6 +9,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(cors());
+
+export const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_SECRET_KEY,
+});
 
 import menuItemRoutes from "./routes/menuItemRoutes.js";
 import authRouter from "./routes/authRouter.js";

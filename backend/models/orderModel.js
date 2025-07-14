@@ -29,15 +29,9 @@ const orderSchema = new mongoose.Schema(
       default: "pending",
     },
     paymentStatus: {
-      type: String,
-      // enum: ["pending", "paid"],
-      default: "pending",
+      type: Boolean,
+      default: "false",
     },
-    // paymentMethod: {
-    //   type: String,
-    //   enum: ["COD", "Online"],
-    //   default: "COD",
-    // },
   },
   { timestamps: true }
 );
