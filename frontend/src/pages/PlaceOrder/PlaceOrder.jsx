@@ -65,12 +65,13 @@ const PlaceOrder = () => {
         name: "Hungrify",
         description: "Hungrify Order",
         order_id: razorpayOrderId,
-        handler: async function (res) {
-          //Razorpay says payment is done — mark order as paid
-          await markPaymentDone(orderId);
+        callback_url: `/verify?success=true&order_id=${orderId}`,
+        // handler: async function (res) {
+        //   //Razorpay says payment is done — mark order as paid
+        //   await markPaymentDone(orderId);
 
-          navigate(`/verify?success=true&order_id=${orderId}`);
-        },
+        //   navigate(`/verify?success=true&order_id=${orderId}`);
+        // },
         prefill: {
           name: deliveryAddress?.name,
           email: user.email,

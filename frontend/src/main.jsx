@@ -9,7 +9,13 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import { Home, Profile, Cart, PlaceOrder } from "./pages/index.js";
+import {
+  Home,
+  Profile,
+  Cart,
+  PlaceOrder,
+  PaymentVerify,
+} from "./pages/index.js";
 import StoreContextProvider from "./context/StoreContext.jsx";
 
 const router = createBrowserRouter(
@@ -19,6 +25,7 @@ const router = createBrowserRouter(
       <Route path="profile" element={<Profile />} />
       <Route path="cart" element={<Cart />} />
       <Route path="checkout" element={<PlaceOrder />} />
+      <Route path="verify" element={<PaymentVerify />} />
     </Route>,
   ])
 );
