@@ -1,7 +1,8 @@
 import React from "react";
-import { menu_list } from "../../assets/assets";
+// import { menu_list } from "../../assets/assets";
 
 const ExploreMenu = ({ category, setCategory }) => {
+  const menu_list = [];
   return (
     <div id="" className="explore-menu flex flex-col md:my-10">
       <h1 className="text-xl md:text-2xl font-medium md:font-semibold">

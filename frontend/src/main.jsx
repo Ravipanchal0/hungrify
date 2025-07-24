@@ -14,7 +14,8 @@ import {
   Profile,
   Cart,
   PlaceOrder,
-  PaymentVerify,
+  PaymentSuccess,
+  PaymentFailed,
 } from "./pages/index.js";
 import StoreContextProvider from "./context/StoreContext.jsx";
 
@@ -25,7 +26,8 @@ const router = createBrowserRouter(
       <Route path="profile" element={<Profile />} />
       <Route path="cart" element={<Cart />} />
       <Route path="checkout" element={<PlaceOrder />} />
-      <Route path="verify" element={<PaymentVerify />} />
+      <Route path="paymentSuccess" element={<PaymentSuccess />} />
+      <Route path="paymentFailed" element={<PaymentFailed />} />
     </Route>,
   ])
 );

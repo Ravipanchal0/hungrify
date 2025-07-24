@@ -30,4 +30,19 @@ const markPaymentDone = async (orderId) => {
   }
 };
 
-export { placeOrderApi, markPaymentDone };
+const fetchPaymentDetails = async (razorpay_order_id, razorpay_payment_id) => {
+  try {
+    const res = await axios.get(
+      `${
+        import.meta.env.VITE_BACKEND_URL
+      }/api/order/payment-details/${razorpay_order_id}/${razorpay_payment_id}`
+    );
+    return res.data.data;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || "Something went wrong, Try again.";
+    throw new Error(errorMessage);
+  }
+};
+
+export { placeOrderApi, markPaymentDone, fetchPaymentDetails };

@@ -2,6 +2,7 @@ import Home from "./Home/Home";
 import Profile from "./Profile/Profile";
 import Cart from "./Cart/Cart";
 import PlaceOrder from "./PlaceOrder/PlaceOrder";
-import PaymentVerify from "./PaymentVerify/PaymentVerify";
+import PaymentSuccess from "./PaymentVerify/PaymentSuccess";
+import PaymentFailed from "./PaymentVerify/PaymentFailed";
 
-export { Home, Profile, Cart, PlaceOrder, PaymentVerify };
+export { Home, Profile, Cart, PlaceOrder, PaymentSuccess, PaymentFailed };

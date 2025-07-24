@@ -1,11 +1,9 @@
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { StoreContext } from "../../context/StoreContext";
 import { toast } from "react-toastify";
 import { placeOrderApi, markPaymentDone } from "../../api/placeOrderApi";
 
 const PlaceOrder = () => {
-  const navigate = useNavigate();
   const { getTotalCartAmount, user, token, food_list, cartItems } =
     useContext(StoreContext);
   let totalAmount = getTotalCartAmount();
@@ -56,7 +54,6 @@ const PlaceOrder = () => {
       // 3. Call backend to place order and get Razorpay info
       const res = await placeOrderApi(orderData, token);
       const { razorpayOrderId, key, amount, currency, orderId } = res.data;
-
       // 4. Razorpay payment options
       const options = {
         key,
@@ -65,16 +62,10 @@ const PlaceOrder = () => {
         name: "Hungrify",
         description: "Hungrify Order",
         order_id: razorpayOrderId,
-        callback_url: `/verify?success=true&order_id=${orderId}`,
-        // handler: async function (res) {
-        //   //Razorpay says payment is done — mark order as paid
-        //   await markPaymentDone(orderId);
-
-        //   navigate(`/verify?success=true&order_id=${orderId}`);
-        // },
+        callback_url: `${import.meta.env.VITE_BACKEND_URL}/api/order/verify`,
         prefill: {
           name: deliveryAddress?.name,
-          email: user.email,
+          email: user?.email,
           contact: deliveryAddress?.phone,
         },
         theme: { color: "#F37254" },
@@ -103,8 +94,28 @@ const PlaceOrder = () => {
           onSubmit={placeOrder}
           className="flex flex-col md:flex-row gap-8 w-full"
         >
-          <div className="delivery-address w-full md:w-3/5">
-            <h2 className="text-2xl mb-4">Delivery Address</h2>
+          <div className="delivery-address w-full md:w-3/5 flex flex-col gap-5">
+            <h2 className="text-2xl">Delivery Address</h2>
+            {deliveryAddress.name && (
+              <div className="saved-address bg-white p-4 rounded shadow">
+                <div className="header flex justify-between mb-2">
+                  <h3 className="text-lg">Saved Address</h3>
+                  <input type="checkbox" name="address" id="" />
+                </div>
+                <div className="address-details">
+                  <p className="font-medium">{deliveryAddress.name}</p>
+                  <p>{deliveryAddress.phone}</p>
+                  <p>
+                    {deliveryAddress.street}, {deliveryAddress.area}
+                  </p>
+                  <p>{deliveryAddress.landmark}</p>
+                  <p>
+                    {deliveryAddress.city}, {deliveryAddress.state}
+                  </p>
+                  <p>{deliveryAddress.pincode}</p>
+                </div>
+              </div>
+            )}
             <div className="address-details bg-white p-4 rounded shadow">
               <div className="name-phone w-full flex mb-4">
                 <div className="name mr-2 flex-1/2">
