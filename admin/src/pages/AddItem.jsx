@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { BiImageAdd } from "react-icons/bi";
 import { addItem } from "../controller/itemController";
 import { toast } from "react-toastify";
+import { StoreContext } from "../Context/StoreContext";
 
 const Home = () => {
+  const { menuCategories } = useContext(StoreContext);
   const initialFormData = {
     isAvailable: true,
     name: "",
@@ -235,14 +237,9 @@ const Home = () => {
             <option value="" disabled hidden>
               Select Category
             </option>
-            <option value="salad">Salad</option>
-            <option value="rolls">Rolls</option>
-            <option value="desserts">Desserts</option>
-            <option value="sandwich">Sandwich</option>
-            <option value="cake">Cake</option>
-            <option value="pure veg">Pure Veg</option>
-            <option value="pasta">Pasta</option>
-            <option value="noddles">Noddles</option>
+            {menuCategories.map((category) => (
+              <option value={category.menu_name}>{category.menu_name}</option>
+            ))}
           </select>
         </div>
         <button
