@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema(
       type: Object,
       default: {},
     },
+    savedAddress: {
+      type: Array,
+      default: [],
+    },
   },
   { timestamps: true, minimize: false }
 );
