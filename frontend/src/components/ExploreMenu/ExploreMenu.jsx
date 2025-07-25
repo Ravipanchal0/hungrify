@@ -1,8 +1,26 @@
-import React from "react";
-// import { menu_list } from "../../assets/assets";
+import React, { useState, useEffect } from "react";
+import { getMenuList } from "../../api/menuApi";
 
 const ExploreMenu = ({ category, setCategory }) => {
-  const menu_list = [];
+  const [filteredCategories, setFilteredCategories] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const items = await getMenuList();
+
+        // Step 1: Get unique category names from available items
+        const uniqueCategories = [
+          ...new Set(items.map((item) => item.category)),
+        ];
+
+        setFilteredCategories(uniqueCategories);
+      } catch (err) {
+        console.error("Failed to fetch items", err);
+      }
+    })();
+  }, []);
+
   return (
     <div id="" className="explore-menu flex flex-col md:my-10">
       <h1 className="text-xl md:text-2xl font-medium md:font-semibold">
@@ -14,29 +32,18 @@ const ExploreMenu = ({ category, setCategory }) => {
         bite.
       </p>
       <hr className="border-none bg-separator h-0.5 my-1 md:my-2" />
-      <div className="explore-menu-list flex items-center text-center  gap-3 md:gap-10 overflow-x-scroll md:my-6 py-1 md:py-3 px-2 whitespace-nowrap hide-scrollbar">
-        {menu_list.map((item, index) => {
+      <div className="explore-menu-list flex items-center text-center justify-evenly gap-3 md:gap-10 overflow-x-scroll md:my-6 py-1 md:py-3 px-2 whitespace-nowrap hide-scrollbar">
+        {filteredCategories.map((item) => {
           return (
             <div
               onClick={() =>
-                setCategory((pre) =>
-                  pre === item.menu_name ? "all" : item.menu_name
-                )
+                setCategory((pre) => (pre === item ? "all" : item))
               }
-              key={index}
-              className="menu-item min-w-12 md:min-w-[120px]"
+              key={item}
+              className="menu-item"
             >
-              <img
-                src={item.menu_image}
-                alt={item.menu_name}
-                className={
-                  category === item.menu_name
-                    ? "w-full h-auto rounded-full ring-2 md:ring-4 ring-offset-1 ring-orange-500"
-                    : "w-full h-auto rounded"
-                }
-              />
-              <p className="md:mt-2 text-sm md:text-base md:font-medium text-gray-800">
-                {item.menu_name}
+              <p className="md:mt-2 text-sm md:text-base md:font-medium text-gray-800 bg-amber-100 rounded px-4 py-2 cursor-pointer">
+                {item.toUpperCase()}
               </p>
             </div>
           );
