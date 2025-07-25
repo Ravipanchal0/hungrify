@@ -10,6 +10,7 @@ const PaymentSuccess = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [paymentData, setPaymentData] = useState(null);
+  const [countdown, setCountdown] = useState(5); // countdown state
 
   const razorpay_order_id = searchParams.get("order_id");
   const razorpay_payment_id = searchParams.get("payment_id");
@@ -29,6 +30,23 @@ const PaymentSuccess = () => {
       }, 5000);
     })();
   }, [razorpay_order_id, razorpay_payment_id]);
+
+  // Handle countdown and redirect
+  useEffect(() => {
+    if (!paymentData) return;
+
+    const interval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          navigate("/");
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval); // cleanup
+  }, [paymentData]);
 
   if (!paymentData) {
     return <p className="text-center my-10">Loading payment details...</p>;
@@ -81,6 +99,11 @@ const PaymentSuccess = () => {
         <div className="amount flex justify-between my-4 font-semibold text-gray-800">
           <p>Amount Paid</p>
           <p>₹ {(paymentDetails.amount / 100).toFixed(2)}</p>
+        </div>
+        <div className="my-4 text-center text-sm text-gray-500">
+          Redirecting to home in{" "}
+          <span className="font-semibold text-gray-800">{countdown}</span>{" "}
+          second{countdown !== 1 && "s"}...
         </div>
       </div>
     </div>
