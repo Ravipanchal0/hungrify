@@ -7,6 +7,7 @@ import {
   deleteItemFromCart,
   getCartItems,
 } from "../api/cartApi.js";
+import { getSavedAddresses } from "../api/userApi.js";
 
 export const StoreContext = createContext();
 
@@ -16,6 +17,7 @@ const StoreContextProvider = ({ children }) => {
   const [token, setToken] = useState("");
   const [user, setUser] = useState({});
   const [food_list, setFood_list] = useState([]);
+  const [savedAddresses, setSavedAddresses] = useState([]);
 
   //Add item into cart
   const addToCart = async (itemId) => {
@@ -62,9 +64,14 @@ const StoreContextProvider = ({ children }) => {
       const user = await getUserByToken(incomingToken);
       setUser(user.data);
       await loadCartData(incomingToken);
+      await fetchSavedAddress(incomingToken);
     }
   };
 
+  const fetchSavedAddress = async (incomingToken) => {
+    const savedAddress = await getSavedAddresses(incomingToken);
+    setSavedAddresses(savedAddress);
+  };
   //get cart items
   const loadCartData = async (token) => {
     const res = await getCartItems(token);
@@ -99,6 +106,8 @@ const StoreContextProvider = ({ children }) => {
     showLogin,
     setShowLogin,
     loadCartData,
+    savedAddresses,
+    fetchSavedAddress,
   };
 
   return (

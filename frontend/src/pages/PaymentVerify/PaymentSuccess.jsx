@@ -25,9 +25,6 @@ const PaymentSuccess = () => {
         setPaymentData(res);
         await markPaymentDone(res.order.notes.orderId);
       }
-      setTimeout(() => {
-        navigate("/");
-      }, 5000);
     })();
   }, [razorpay_order_id, razorpay_payment_id]);
 
@@ -35,18 +32,23 @@ const PaymentSuccess = () => {
   useEffect(() => {
     if (!paymentData) return;
 
-    const interval = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          navigate("/");
-        }
-        return prev - 1;
-      });
-    }, 1000);
+    const timeout = setTimeout(() => {
+      const interval = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            navigate("/");
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
 
-    return () => clearInterval(interval); // cleanup
-  }, [paymentData]);
+      return () => clearInterval(interval);
+    }, 0); // Decouple from render
+
+    return () => clearTimeout(timeout);
+  }, [paymentData, navigate]);
 
   if (!paymentData) {
     return <p className="text-center my-10">Loading payment details...</p>;

@@ -1,11 +1,23 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { StoreContext } from "../../context/StoreContext";
 import { toast } from "react-toastify";
-import { placeOrderApi, markPaymentDone } from "../../api/placeOrderApi";
+import { placeOrderApi } from "../../api/placeOrderApi";
+import { saveNewAddress } from "../../api/userApi";
+import { useEffect } from "react";
 
 const PlaceOrder = () => {
-  const { getTotalCartAmount, user, token, food_list, cartItems } =
-    useContext(StoreContext);
+  const {
+    getTotalCartAmount,
+    user,
+    token,
+    food_list,
+    cartItems,
+    savedAddresses,
+    fetchSavedAddress,
+  } = useContext(StoreContext);
+
+  const [selectedSavedAddressId, setSelectedSavedAddressId] = useState(false);
+
   let totalAmount = getTotalCartAmount();
   let taxes = (totalAmount * 0.08).toFixed(2);
   let shippingCharges = totalAmount > 299 ? 0 : totalAmount > 0 ? 49 : 0;
@@ -27,6 +39,11 @@ const PlaceOrder = () => {
   const handleOnChange = (e) => {
     setdeliveryAddress({ ...deliveryAddress, [e.target.name]: e.target.value });
   };
+  useEffect(() => {
+    (async () => {
+      await fetchSavedAddress(token);
+    })();
+  }, []);
 
   const placeOrder = async (e) => {
     e.preventDefault();
@@ -51,9 +68,14 @@ const PlaceOrder = () => {
         totalAmount: parseFloat(totalPayable),
       };
 
+      // Save new delivery address
+      await saveNewAddress(deliveryAddress, token);
+
       // 3. Call backend to place order and get Razorpay info
       const res = await placeOrderApi(orderData, token);
+
       const { razorpayOrderId, key, amount, currency, orderId } = res.data;
+
       // 4. Razorpay payment options
       const options = {
         key,
@@ -88,36 +110,49 @@ const PlaceOrder = () => {
   };
 
   return (
-    <div className="place-order-page md:max-w-10/12 mx-auto md:my-10 px-3">
-      <div className="place-order-content flex flex-col justify-between md:flex-row gap-16">
+    <div className="place-order-page md:max-w-10/12 mx-auto mt-3 md:my-10 px-3">
+      <div className="place-order-content flex flex-col justify-between md:flex-row">
         <form
           onSubmit={placeOrder}
           className="flex flex-col md:flex-row gap-8 w-full"
         >
-          <div className="delivery-address w-full md:w-3/5 flex flex-col gap-5">
-            <h2 className="text-2xl">Delivery Address</h2>
-            {deliveryAddress.name && (
-              <div className="saved-address bg-white p-4 rounded shadow">
-                <div className="header flex justify-between mb-2">
-                  <h3 className="text-lg">Saved Address</h3>
-                  <input type="checkbox" name="address" id="" />
-                </div>
-                <div className="address-details">
-                  <p className="font-medium">{deliveryAddress.name}</p>
-                  <p>{deliveryAddress.phone}</p>
-                  <p>
-                    {deliveryAddress.street}, {deliveryAddress.area}
-                  </p>
-                  <p>{deliveryAddress.landmark}</p>
-                  <p>
-                    {deliveryAddress.city}, {deliveryAddress.state}
-                  </p>
-                  <p>{deliveryAddress.pincode}</p>
-                </div>
+          <div className="delivery-address w-full md:w-3/5 flex flex-col gap-3 md:gap-5">
+            <h2 className="text-lg md:text-2xl">Delivery Address</h2>
+
+            {/* saved address */}
+            {savedAddresses.length > 0 && (
+              <div className="saved-address-list bg-white p-3 mb-2 rounded shadow">
+                <h3 className="text-base md:text-lg mb-3">Saved Address</h3>
+                {savedAddresses.map((addr) => (
+                  <div key={addr.id} className="saved-address my-2">
+                    <label className="flex gap-2 items-start cursor-pointer">
+                      <input
+                        type="radio" // 👉 change to radio to allow only one selected at a time
+                        name="saved-address"
+                        onChange={() => {
+                          setSelectedSavedAddressId(addr.id);
+                          setdeliveryAddress(addr);
+                        }}
+                        checked={selectedSavedAddressId === addr.id}
+                      />
+                      <div>
+                        <p className="font-medium">{addr.name}</p>
+                        <p className="text-xs text-gray-600">{addr.phone}</p>
+                        <p className="text-xs text-gray-600">
+                          {addr.street}, {addr.area}
+                        </p>
+                        <p className="text-xs text-gray-600">
+                          {addr.city}, {addr.state} - {addr.pincode}
+                        </p>
+                      </div>
+                    </label>
+                  </div>
+                ))}
               </div>
             )}
+
             <div className="address-details bg-white p-4 rounded shadow">
-              <div className="name-phone w-full flex mb-4">
+              <div className="name-phone w-full flex md:flex-row flex-col mb-4">
                 <div className="name mr-2 flex-1/2">
                   <label className=" block text-sm font-medium mb-1">
                     Name
@@ -148,8 +183,8 @@ const PlaceOrder = () => {
                 </div>
               </div>
               <div className="address form-group mb-4">
-                <div className="address w-full flex mb-4">
-                  <div className="flate-house-building flex-1/2 mr-2">
+                <div className="address w-full flex md:flex-row flex-col mb-4">
+                  <div className="flate-house-building flex-1/2  mr-2">
                     <label className="block text-sm font-medium mb-1">
                       Flate, House No., Building, Street
                     </label>
@@ -163,7 +198,7 @@ const PlaceOrder = () => {
                       required
                     />
                   </div>
-                  <div className="area-colony-street flex-1/2">
+                  <div className="area-colony-street  flex-1/2">
                     <label className="block text-sm font-medium mb-1">
                       Area, Colony, Street, Sector, Village
                     </label>
@@ -177,7 +212,7 @@ const PlaceOrder = () => {
                     />
                   </div>
                 </div>
-                <div className="landmark-city w-full flex mb-4">
+                <div className="landmark-city w-full flex md:flex-row flex-col mb-4">
                   <div className="landmark flex-1/2 mr-2">
                     <label className="block text-sm font-medium mb-1">
                       Landmark (Optional)
@@ -207,7 +242,7 @@ const PlaceOrder = () => {
                   </div>
                 </div>
 
-                <div className="city-pincode w-full flex mb-4">
+                <div className="city-pincode w-full flex md:flex-row flex-col mb-4">
                   <div className="state mr-2 flex-1/2">
                     <label className="block text-sm font-medium mb-1">
                       State
@@ -240,8 +275,8 @@ const PlaceOrder = () => {
               </div>
             </div>
           </div>
-          <div className="payment-method w-full md:w-2/5 px-4 ">
-            <h2 className="text-2xl mb-4">Payment Details</h2>
+          <div className="payment-method w-full md:w-2/5 md:px-4 ">
+            <h2 className="text-lg md:text-2xl md:mb-4">Payment Details</h2>
             <div className="order-summary">
               <div className="order-details bg-white p-4 rounded shadow">
                 <p className="order-summary-title font-medium mb-2">
