@@ -7,6 +7,7 @@ import {
   getUser,
   getSavedAddresses,
   saveNewAddress,
+  deleteSavedAddress,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -22,5 +23,10 @@ router.route("/profile/addresses").post(authMiddleware, getSavedAddresses);
 
 //user address router
 router.route("/profile/address").post(authMiddleware, saveNewAddress);
+
+//user address router
+router
+  .route("/profile/address/delete")
+  .post(authMiddleware, deleteSavedAddress);
 
 export default router;
