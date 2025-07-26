@@ -8,6 +8,8 @@ import {
   getSavedAddresses,
   saveNewAddress,
   deleteSavedAddress,
+  getUserOrders,
+  editSaveAddress,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -21,15 +23,21 @@ router
 //user password change router
 router.route("/profile/passwordchange").put(authMiddleware, passwordChange);
 
-//user address router
+//get saved address router
 router.route("/profile/addresses").post(authMiddleware, getSavedAddresses);
 
-//user address router
-router.route("/profile/address").post(authMiddleware, saveNewAddress);
+//save new address router
+router
+  .route("/profile/address")
+  .post(authMiddleware, saveNewAddress)
+  .put(authMiddleware, editSaveAddress);
 
-//user address router
+//delete address router
 router
   .route("/profile/address/delete")
   .post(authMiddleware, deleteSavedAddress);
+
+//user orders router
+router.route("/profile/myorders").post(authMiddleware, getUserOrders);
 
 export default router;

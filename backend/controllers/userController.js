@@ -106,7 +106,9 @@ const saveNewAddress = asyncHandler(async (req, res) => {
   const { name, phone, city, pincode, ...rest } = req.body;
 
   if (
-    [name, phone, city].some((field) => field === undefined || field === "")
+    [name, phone, city, pincode].some(
+      (field) => field === undefined || field === ""
+    )
   ) {
     throw new ApiError(400, "All fields are required");
   }
@@ -137,6 +139,48 @@ const saveNewAddress = asyncHandler(async (req, res) => {
     .status(200)
     .json(
       new ApiResponse(200, "Address saved successfully", user.savedAddress)
+    );
+});
+
+// @desc    Edit save address
+// @route   PUT /api/user/profile/address
+// @access  private/user
+const editSaveAddress = asyncHandler(async (req, res) => {
+  const { userId, id, name, phone, city, pincode, ...rest } = req.body;
+
+  if (
+    [name, phone, city, pincode].some(
+      (field) => field === undefined || field === ""
+    )
+  ) {
+    throw new ApiError(400, "All fields are required");
+  }
+
+  const user = await userModel.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  const index = user.savedAddress.findIndex((addr) => addr.id === id);
+  if (index === -1) {
+    throw new ApiError(404, "Address not found");
+  }
+
+  user.savedAddress[index] = {
+    ...user.savedAddress[index],
+    name,
+    phone,
+    city,
+    pincode,
+    ...rest,
+  };
+
+  await user.save();
+
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, "Address updated successfully", user.savedAddress)
     );
 });
 
@@ -172,6 +216,23 @@ const deleteSavedAddress = asyncHandler(async (req, res) => {
   res.json(new ApiResponse(200, "Saved address deleted successfully", null));
 });
 
+// @desc    get user's orders
+// @route   POST /api/user/myorders
+// @access  private/user
+const getUserOrders = asyncHandler(async (req, res) => {
+  const { userId } = req.body;
+
+  if (!userId) {
+    throw new ApiError(400, "Please Login again!");
+  }
+
+  const user = await userModel.findById(userId).populate("orders");
+
+  res.json(
+    new ApiResponse(200, "User orders fetched successfully", user.orders)
+  );
+});
+
 export {
   editUserDetails,
   passwordChange,
@@ -179,4 +240,6 @@ export {
   getSavedAddresses,
   saveNewAddress,
   deleteSavedAddress,
+  getUserOrders,
+  editSaveAddress,
 };
