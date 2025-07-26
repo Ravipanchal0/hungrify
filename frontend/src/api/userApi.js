@@ -19,6 +19,25 @@ const saveNewAddress = async (address, token) => {
   }
 };
 
+const editSaveAddress = async (token, address) => {
+  try {
+    const res = await axios.put(
+      `${import.meta.env.VITE_BACKEND_URL}/api/user/profile/address`,
+      address,
+      {
+        headers: {
+          token: token,
+        },
+      }
+    );
+    return res.data.data;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || "Something went wrong, Try again.";
+    throw new Error(errorMessage);
+  }
+};
+
 const getSavedAddresses = async (token) => {
   try {
     const res = await axios.post(
@@ -38,4 +57,108 @@ const getSavedAddresses = async (token) => {
   }
 };
 
-export { saveNewAddress, getSavedAddresses };
+const deleteSavedAddresses = async (token, id) => {
+  try {
+    const res = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/api/user/profile/address/delete`,
+      { id },
+      {
+        headers: {
+          token: token,
+        },
+      }
+    );
+    return res.data.data;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || "Something went wrong, Try again.";
+    throw new Error(errorMessage);
+  }
+};
+
+const getMyorders = async (token) => {
+  try {
+    const res = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/api/user/profile/myorders`,
+      {},
+      {
+        headers: {
+          token: token,
+        },
+      }
+    );
+    return res.data.data;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || "Something went wrong, Try again.";
+    throw new Error(errorMessage);
+  }
+};
+
+const getUserProfile = async (token) => {
+  try {
+    const res = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/api/user/profile/`,
+      {},
+      {
+        headers: {
+          token: token,
+        },
+      }
+    );
+    return res.data.data;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || "Something went wrong, Try again.";
+    throw new Error(errorMessage);
+  }
+};
+
+const passwordChange = async (token, data) => {
+  try {
+    const res = await axios.put(
+      `${import.meta.env.VITE_BACKEND_URL}/api/user/profile/passwordchange`,
+      data,
+      {
+        headers: {
+          token: token,
+        },
+      }
+    );
+    return res.data.data;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || "Something went wrong, Try again.";
+    throw new Error(errorMessage);
+  }
+};
+
+const updateProfile = async (token, data) => {
+  try {
+    const res = await axios.put(
+      `${import.meta.env.VITE_BACKEND_URL}/api/user/profile/`,
+      data,
+      {
+        headers: {
+          token: token,
+        },
+      }
+    );
+    return res.data.data;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || "Something went wrong, Try again.";
+    throw new Error(errorMessage);
+  }
+};
+
+export {
+  saveNewAddress,
+  editSaveAddress,
+  getSavedAddresses,
+  getMyorders,
+  getUserProfile,
+  updateProfile,
+  passwordChange,
+  deleteSavedAddresses,
+};

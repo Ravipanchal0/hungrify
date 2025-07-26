@@ -161,7 +161,7 @@ const Navbar = ({ setShowLogin }) => {
                   Profile
                 </NavLink>
                 <NavLink
-                  to="/profile"
+                  to="/myorders"
                   className="text-gray-700 hover:text-amber-500 transition"
                 >
                   My Order

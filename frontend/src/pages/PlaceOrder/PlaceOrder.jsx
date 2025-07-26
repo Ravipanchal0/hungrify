@@ -133,7 +133,6 @@ const PlaceOrder = () => {
                           setSelectedSavedAddressId(addr.id);
                           setdeliveryAddress(addr);
                         }}
-                        checked={selectedSavedAddressId === addr.id}
                       />
                       <div>
                         <p className="font-medium">{addr.name}</p>

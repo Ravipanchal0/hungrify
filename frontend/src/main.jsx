@@ -16,18 +16,20 @@ import {
   PlaceOrder,
   PaymentSuccess,
   PaymentFailed,
+  Order,
 } from "./pages/index.js";
 import StoreContextProvider from "./context/StoreContext.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements([
     <Route path="/" element={<App />}>
-      <Route path="" element={<Home />} />
+      <Route index path="" element={<Home />} />
       <Route path="profile" element={<Profile />} />
       <Route path="cart" element={<Cart />} />
       <Route path="checkout" element={<PlaceOrder />} />
       <Route path="paymentSuccess" element={<PaymentSuccess />} />
       <Route path="paymentFailed" element={<PaymentFailed />} />
+      <Route path="myorders" element={<Order />} />
     </Route>,
   ])
 );

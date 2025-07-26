@@ -16,6 +16,7 @@ import { GrInstagram } from "react-icons/gr";
 import { FaTwitter } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { MdEditSquare } from "react-icons/md";
 
 export {
   IoBagHandle,
@@ -35,4 +36,5 @@ export {
   IoMdAdd,
   IoMdRemove,
   MdDelete,
+  MdEditSquare,
 };

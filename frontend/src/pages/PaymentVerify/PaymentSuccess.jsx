@@ -37,7 +37,7 @@ const PaymentSuccess = () => {
         setCountdown((prev) => {
           if (prev <= 1) {
             clearInterval(interval);
-            navigate("/");
+            navigate("/myorders");
             return 0;
           }
           return prev - 1;
