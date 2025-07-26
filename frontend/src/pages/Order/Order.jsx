@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import OrderCard from "./OrderCard";
+import { toast } from "react-toastify";
 import { StoreContext } from "../../context/StoreContext";
-import { getMyorders } from "../../api/userApi";
+import { cancelOrder } from "../../api/userApi";
 
 const Order = () => {
   const { token, fetchMyOrders, myOrders } = useContext(StoreContext);
@@ -10,9 +10,15 @@ const Order = () => {
       await fetchMyOrders(token);
     })();
   }, []);
-
-  const handleCancelOrder = () => {
-    console.log("cancel order");
+  const handleCancelOrder = async (orderId) => {
+    try {
+      if (!window.confirm("Are you want to cancel the order?")) return;
+      await cancelOrder(token, orderId);
+      await fetchMyOrders(token);
+      toast.success("Order cancelled successfully!");
+    } catch (err) {
+      toast.error(err.message);
+    }
   };
 
   return (
@@ -20,6 +26,8 @@ const Order = () => {
       <h3 className="text-2xl mb-3">My Orders</h3>
       {!myOrders ? (
         <p>Loading my orders...</p>
+      ) : myOrders.length === 0 ? (
+        <p>You have no order</p>
       ) : (
         <div className="main-container w-full shadow rounded">
           <div className="header  grid place-items-start items-center grid-cols-[2fr_1.5fr_1.5fr_1.2fr_1fr] bg-gray-200 px-4 py-3 border-b border-b-gray-400  font-medium rounded-t-md text-gray-700">
@@ -52,7 +60,7 @@ const Order = () => {
                   <p className="status text-gray-600">{item.status}</p>
                   <button
                     disabled={item.status === "delivered"}
-                    onClick={handleCancelOrder}
+                    onClick={() => handleCancelOrder(item._id)}
                     className="action text-rose-600 disabled:text-gray-400 disabled:pointer-events-none cursor-pointer"
                   >
                     cancel

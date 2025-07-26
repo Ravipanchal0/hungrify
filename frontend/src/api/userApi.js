@@ -152,6 +152,25 @@ const updateProfile = async (token, data) => {
   }
 };
 
+const cancelOrder = async (token, orderId) => {
+  try {
+    const res = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/api/order/cancel`,
+      { orderId },
+      {
+        headers: {
+          token: token,
+        },
+      }
+    );
+    return res.data.data;
+  } catch (err) {
+    throw new Error(
+      err.response?.data?.message || "Failed to cancel the order"
+    );
+  }
+};
+
 export {
   saveNewAddress,
   editSaveAddress,
@@ -161,4 +180,5 @@ export {
   updateProfile,
   passwordChange,
   deleteSavedAddresses,
+  cancelOrder,
 };
