@@ -64,7 +64,6 @@ const StoreContextProvider = ({ children }) => {
       const user = await getUserByToken(incomingToken);
       setUser(user.data);
       await loadCartData(incomingToken);
-      await fetchSavedAddress(incomingToken);
     }
   };
 
