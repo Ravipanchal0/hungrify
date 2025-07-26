@@ -3,6 +3,7 @@ import { verifyToken } from "../utils/jwtToken.js";
 
 const authMiddleware = async (req, _, next) => {
   const token = req.headers.token;
+
   if (!token) {
     throw new ApiError(401, "Unauthorised! Please login");
   }

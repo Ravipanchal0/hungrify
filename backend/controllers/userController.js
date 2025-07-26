@@ -8,8 +8,14 @@ import { v4 as uuid } from "uuid";
 // @route   GET /api/user/profile
 // @access  private/user
 const getUser = asyncHandler(async (req, res) => {
-  const { userId } = req.body.userId;
-  const user = await userModel.findById(userId).select("-password");
+  console.log(req.body);
+  const userId = req.body.userId;
+
+  if (!userId) {
+    throw new ApiError(400, "Please login again!");
+  }
+  const user = await userModel.findById(userId);
+
   if (!user) {
     throw new ApiError(404, "User not found");
   }
@@ -22,7 +28,7 @@ const getUser = asyncHandler(async (req, res) => {
 const editUserDetails = asyncHandler(async (req, res) => {
   const { name, email, userId } = req.body;
 
-  if ([name, email].some((field) => field === "")) {
+  if ([name, email].some((field) => field === undefined || field === "")) {
     throw new ApiError(400, "All fields are required");
   }
 
@@ -55,6 +61,10 @@ const passwordChange = asyncHandler(async (req, res) => {
 
   if (!oldPassword || !newPassword) {
     throw new ApiError(400, "Both old and new passwords are required");
+  }
+
+  if (newPassword.length < 8) {
+    throw new ApiError(400, "Password should be min 8 character");
   }
 
   const user = await userModel.findById(userId).select("+password");
@@ -95,6 +105,12 @@ const getSavedAddresses = asyncHandler(async (req, res) => {
 const saveNewAddress = asyncHandler(async (req, res) => {
   const { name, phone, city, pincode, ...rest } = req.body;
 
+  if (
+    [name, phone, city].some((field) => field === undefined || field === "")
+  ) {
+    throw new ApiError(400, "All fields are required");
+  }
+
   const user = await userModel.findById(req.body.userId);
   const addr_id = uuid();
 
@@ -130,26 +146,30 @@ const saveNewAddress = asyncHandler(async (req, res) => {
 const deleteSavedAddress = asyncHandler(async (req, res) => {
   const { userId, id } = req.body;
 
-  // Step 1: Remove the address with the given id from savedAddress array
-  const updatedUser = await userModel.findByIdAndUpdate(
-    userId,
-    {
-      $pull: { savedAddress: { id: id } },
-    },
-    { new: true, select: "savedAddress" } // return the updated user document
-  );
-
-  if (!updatedUser) {
-    return res.status(404).json(new ApiResponse(404, "User not found", null));
+  if (!userId) {
+    throw new ApiError(400, "Please Login again!");
+  }
+  if (!id) {
+    throw new ApiError(404, "Address not found");
   }
 
-  res.json(
-    new ApiResponse(
-      200,
-      "Saved address deleted successfully",
-      updatedUser.savedAddress
-    )
-  );
+  const user = await userModel.findById(userId);
+
+  const addr = user.savedAddress.some((ad) => ad.id === id);
+
+  if (addr) {
+    await userModel.findByIdAndUpdate(
+      userId,
+      {
+        $pull: { savedAddress: { id: id } },
+      },
+      { new: true }
+    );
+  } else {
+    throw new ApiError(404, "Address not found");
+  }
+
+  res.json(new ApiResponse(200, "Saved address deleted successfully", null));
 });
 
 export {

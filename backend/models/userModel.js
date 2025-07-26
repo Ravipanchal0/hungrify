@@ -23,6 +23,12 @@ const userSchema = new mongoose.Schema(
       type: Object,
       default: {},
     },
+    orders: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
+      },
+    ],
     savedAddress: {
       type: Array,
       default: [],

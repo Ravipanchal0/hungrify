@@ -32,6 +32,12 @@ const placeOrder = asyncHandler(async (req, res) => {
     },
   });
 
+  if (razorpayOrder.id) {
+    await userModel.findByIdAndUpdate(userId, {
+      $push: { orders: newOrder._id },
+    });
+  }
+
   // Step 4: Send to frontend
   res.status(200).json(
     new ApiResponse(200, "Order created", {

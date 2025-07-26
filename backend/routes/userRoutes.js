@@ -13,7 +13,10 @@ import {
 const router = express.Router();
 
 //profile and update router
-router.route("/profile").get(getUser).put(authMiddleware, editUserDetails);
+router
+  .route("/profile")
+  .post(authMiddleware, getUser)
+  .put(authMiddleware, editUserDetails);
 
 //user password change router
 router.route("/profile/passwordchange").put(authMiddleware, passwordChange);
