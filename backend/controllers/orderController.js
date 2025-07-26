@@ -103,4 +103,47 @@ const fetchOrderById = asyncHandler(async (req, res) => {
   );
 });
 
-export { placeOrder, markOrderPaid, paymentVerification, fetchOrderById };
+// @desc    Cancel order by ID
+// @route   POST /api/user/order/:orderId
+// @access  Private/User
+const cancelOrder = asyncHandler(async (req, res) => {
+  const { orderId, userId } = req.body;
+
+  if (!orderId) {
+    throw new ApiError(400, "Order ID is required");
+  }
+
+  const user = await userModel.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  // Remove order from Order collection
+  const order = await orderModel.findById(orderId);
+  if (!order) {
+    throw new ApiError(404, "Order not found");
+  }
+
+  // check if order belongs to the user
+  if (String(order.userId) !== String(userId)) {
+    throw new ApiError(403, "You are not allowed to cancel this order");
+  }
+
+  await order.deleteOne();
+
+  // Remove order from user's orders list
+  user.orders = user.orders.filter((id) => String(id) !== String(orderId));
+  await user.save();
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Order cancelled successfully", user.orders));
+});
+
+export {
+  placeOrder,
+  markOrderPaid,
+  paymentVerification,
+  fetchOrderById,
+  cancelOrder,
+};

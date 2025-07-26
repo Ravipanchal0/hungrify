@@ -5,11 +5,13 @@ import {
   markOrderPaid,
   paymentVerification,
   fetchOrderById,
+  cancelOrder,
 } from "../controllers/orderController.js";
 
 const router = express.Router();
 
 router.route("/place").post(authMiddleware, placeOrder);
+router.route("/cancel").post(authMiddleware, cancelOrder);
 router.route("/verify").post(paymentVerification);
 router.route("/payment-details/:orderId/:payment_id").get(fetchOrderById);
 router.route("/mark-paid/:orderId").put(markOrderPaid);
