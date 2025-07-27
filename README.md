@@ -53,20 +53,28 @@ Hungrify is a modern food ordering admin panel designed to manage restaurants, m
 
 ```
 hungrify/
-├── client/                  # React frontend
+├── frontend/                # React frontend for customers
 │   ├── src/
 │   │   ├── assets/          # Images & icons
 │   │   ├── components/      # Reusable UI components
 │   │   ├── Context/         # React context API
 │   │   ├── controller/      # Axios API functions
-│   │   └── pages/           # Main views (Dashboard, Orders, etc.)
-│
-├── server/                  # Node.js backend
-│   ├── controllers/         # Order, user logic
+│   │   └── pages/           # Main views (Home, Menu, Cart, etc.)
+
+├── admin/                   # React admin dashboard
+│   ├── src/
+│   │   ├── assets/          # Dashboard icons & media
+│   │   ├── components/      # UI blocks for admin dashboard
+│   │   ├── Context/         # Admin state management
+│   │   ├── controller/      # API calls to backend
+│   │   └── pages/           # Dashboard pages (Orders, Users, Analytics, etc.)
+
+├── server/                  # Node.js backend API
+│   ├── controllers/         # Order, user, and item logic
 │   ├── models/              # Mongoose schemas
-│   ├── routes/              # API routes
-│   ├── middlewares/         # Error handling, authentication
-│   └── utils/               # API response and error helpers
+│   ├── routes/              # Express route definitions
+│   ├── middlewares/         # Error handling, auth, validation
+│   └── utils/               # API responses, error helpers, formatters
 ```
 
 ---
