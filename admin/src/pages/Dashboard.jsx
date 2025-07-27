@@ -18,9 +18,13 @@ import { assets } from "../assets/assets";
 import { MetricCard } from "../components";
 
 const Dashboard = () => {
-  const { fetchAllOrdersList, fetchOrdersByStatus } = useContext(StoreContext);
+  const { fetchAllOrdersList } = useContext(StoreContext);
   const [dataFilter, setDataFilter] = useState("This Week");
   const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   useEffect(() => {
     loadData();
