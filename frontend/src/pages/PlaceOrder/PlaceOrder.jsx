@@ -47,7 +47,6 @@ const PlaceOrder = () => {
   }, []);
 
   useEffect(() => {
-    console.log(totalAmount);
     if (!token) {
       navigate("/");
     } else if (totalAmount === "0.00") {

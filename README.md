@@ -50,6 +50,7 @@ Hungrify is a modern food ordering admin panel designed to manage restaurants, m
 - Node.js
 - Express
 - MongoDB (Mongoose ORM)
+- cors
 - bcrypt
 - jsonwebtoken
 - express-async-handler
