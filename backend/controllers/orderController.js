@@ -129,7 +129,14 @@ const cancelOrder = asyncHandler(async (req, res) => {
     throw new ApiError(403, "You are not allowed to cancel this order");
   }
 
-  await order.deleteOne();
+  await orderModel.findByIdAndUpdate(
+    orderId,
+    {
+      status: "cancelled",
+      $unset: { userId: "" }, // This removes userId field from the order
+    },
+    { new: true }
+  );
 
   // Remove order from user's orders list
   user.orders = user.orders.filter((id) => String(id) !== String(orderId));
@@ -140,10 +147,73 @@ const cancelOrder = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Order cancelled successfully", user.orders));
 });
 
+// @desc    Fetch all orders
+// @route   GET /api/user/order/
+// @access  Private/Admin
+const fetchAllOrders = asyncHandler(async (req, res) => {
+  const orders = await orderModel.find({});
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Order fetched successfully", orders));
+});
+
+// @desc    Fetch orders by status
+// @route   GET /api/user/order/
+// @access  Private/Admin
+const fetchOrdersByStatus = asyncHandler(async (req, res) => {
+  const { status } = req.body;
+  const validStatuses = [
+    "pending",
+    "confirmed",
+    "preparing",
+    "on the way",
+    "delivered",
+    "cancelled",
+  ];
+
+  if (!validStatuses.includes(status)) {
+    return res.status(400).json(new ApiResponse(400, "Invalid status"));
+  }
+
+  const orders = await orderModel.find({ status });
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, `${status} orders fetched successfully`, orders)
+    );
+});
+
+// @desc    Update order status by admin
+// @route   PATCH /api/user/order/:orderId/status
+// @access  Private/Admin
+const updateOrderStatus = asyncHandler(async (req, res) => {
+  const { orderId, status } = req.body;
+
+  // Find order and update
+  const order = await orderModel.findByIdAndUpdate(
+    orderId,
+    {
+      status,
+    },
+    { new: true }
+  );
+
+  if (!order) {
+    return res.status(404).json(new ApiResponse(404, "Order not found"));
+  }
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Order status updated successfully", order));
+});
+
 export {
   placeOrder,
   markOrderPaid,
   paymentVerification,
   fetchOrderById,
   cancelOrder,
+  fetchAllOrders,
+  fetchOrdersByStatus,
+  updateOrderStatus,
 };

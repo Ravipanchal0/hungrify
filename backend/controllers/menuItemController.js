@@ -109,11 +109,11 @@ const editMenuItem = asyncHandler(async (req, res) => {
   const updatedData = await itemModel.findByIdAndUpdate(
     id,
     {
-      name: name,
-      price: price,
-      description: description,
-      category: category,
-      discount: discount,
+      name,
+      price,
+      description,
+      category,
+      discount,
     },
     { new: true }
   );
