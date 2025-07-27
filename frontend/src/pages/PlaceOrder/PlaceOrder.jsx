@@ -4,8 +4,10 @@ import { toast } from "react-toastify";
 import { placeOrderApi } from "../../api/placeOrderApi";
 import { saveNewAddress } from "../../api/userApi";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const PlaceOrder = () => {
+  const navigate = useNavigate();
   const {
     getTotalCartAmount,
     user,
@@ -39,11 +41,20 @@ const PlaceOrder = () => {
   const handleOnChange = (e) => {
     setdeliveryAddress({ ...deliveryAddress, [e.target.name]: e.target.value });
   };
+
   useEffect(() => {
     (async () => {
       await fetchSavedAddress(token);
     })();
   }, []);
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/");
+    } else if (totalAmount === 0) {
+      navigate("/cart");
+    }
+  }, [token]);
 
   const placeOrder = async (e) => {
     e.preventDefault();
