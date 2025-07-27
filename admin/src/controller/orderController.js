@@ -5,7 +5,9 @@ const baseUrl = import.meta.env.VITE_BACKEND_URL;
 // 1. Fetch All Orders
 const fetchAllOrders = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/api/order/orders`);
+    const response = await axios.get(`${baseUrl}/api/order/orders`, {
+      withCredentials: true,
+    });
     if (response.data) {
       return response.data.data;
     }
