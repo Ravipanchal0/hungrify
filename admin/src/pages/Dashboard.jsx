@@ -18,13 +18,13 @@ import { assets } from "../assets/assets";
 import { MetricCard } from "../components";
 
 const Dashboard = () => {
-  const { fetchAllOrdersList } = useContext(StoreContext);
-  const [filter, setFilter] = useState("This Week");
+  const { fetchAllOrdersList, fetchOrdersByStatus } = useContext(StoreContext);
+  const [dataFilter, setDataFilter] = useState("This Week");
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     loadData();
-  }, [filter]);
+  }, [dataFilter]);
 
   const loadData = async () => {
     try {
@@ -39,17 +39,16 @@ const Dashboard = () => {
   const deliveredOrders = orders.filter((o) => o.status === "delivered");
   const cancelledOrders = orders.filter((o) => o.status === "cancelled");
   const newOrders = orders.filter((o) => {
-    const today = new Date();
     const created = new Date(o.createdAt);
     // e.g., new this week logic
-    return created >= getStartOfPeriod(filter);
+    return created >= getStartOfPeriod(dataFilter);
   });
 
   const revenue = deliveredOrders.reduce((sum, o) => sum + o.totalAmount, 0);
   const totalOrders = orders.length;
 
   // Build chart data grouped by day/week
-  const chartData = buildChartData(orders, filter);
+  const chartData = buildChartData(orders, dataFilter);
 
   return (
     <div className="w-full h-full p-5">
@@ -64,14 +63,14 @@ const Dashboard = () => {
 
         {/* Filter Dropdown */}
         <select
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
+          value={dataFilter}
+          onChange={(e) => setDataFilter(e.target.value)}
           className="border border-gray-300 rounded-md px-2 py-1 md:px-4 md:py-2 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          <option>This Week</option>
-          <option>Last Week</option>
-          <option>This Month</option>
-          <option>Last Month</option>
+          <option value="This Week">This Week</option>
+          <option value="Last Week">Last Week</option>
+          <option value="This Month">This Month</option>
+          <option value="Last Week">Last Month</option>
         </select>
       </div>
 
