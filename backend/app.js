@@ -32,6 +32,10 @@ export const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_SECRET_KEY,
 });
 
+app.get("/", (req, res) => {
+  res.status(200).json({ msg: "Success" });
+});
+
 import menuItemRoutes from "./routes/menuItemRoutes.js";
 import authRouter from "./routes/authRouter.js";
 import userRouter from "./routes/userRoutes.js";
