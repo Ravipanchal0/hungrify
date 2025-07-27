@@ -18,8 +18,6 @@ const PlaceOrder = () => {
     fetchSavedAddress,
   } = useContext(StoreContext);
 
-  const [selectedSavedAddressId, setSelectedSavedAddressId] = useState(false);
-
   let totalAmount = getTotalCartAmount();
   let taxes = (totalAmount * 0.08).toFixed(2);
   let shippingCharges = totalAmount > 299 ? 0 : totalAmount > 0 ? 49 : 0;
@@ -49,12 +47,13 @@ const PlaceOrder = () => {
   }, []);
 
   useEffect(() => {
+    console.log(totalAmount);
     if (!token) {
       navigate("/");
-    } else if (totalAmount === 0) {
+    } else if (totalAmount === "0.00") {
       navigate("/cart");
     }
-  }, [token]);
+  }, [token, navigate]);
 
   const placeOrder = async (e) => {
     e.preventDefault();
@@ -141,7 +140,6 @@ const PlaceOrder = () => {
                         type="radio" // 👉 change to radio to allow only one selected at a time
                         name="saved-address"
                         onChange={() => {
-                          setSelectedSavedAddressId(addr.id);
                           setdeliveryAddress(addr);
                         }}
                       />
