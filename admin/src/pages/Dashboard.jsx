@@ -45,7 +45,7 @@ const Dashboard = () => {
   });
 
   const revenue = deliveredOrders?.reduce((sum, o) => sum + o.totalAmount, 0);
-  const totalOrders = orders.length;
+  const totalOrders = orders?.length;
 
   // Build chart data grouped by day/week
   const chartData = buildChartData(orders, dataFilter);
@@ -88,19 +88,19 @@ const Dashboard = () => {
         />
         <MetricCard
           title="Delivered"
-          value={deliveredOrders.length}
+          value={deliveredOrders?.length}
           color="bg-green-100"
           icon={assets.delivered}
         />
         <MetricCard
           title="Cancelled"
-          value={cancelledOrders.length}
+          value={cancelledOrders?.length}
           color="bg-red-100"
           icon={assets.cancelled_ordered}
         />
         <MetricCard
           title="New Orders"
-          value={newOrders.length}
+          value={newOrders?.length}
           color="bg-purple-100"
           icon={assets.new_order}
         />
