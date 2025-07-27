@@ -36,19 +36,23 @@ const Dashboard = () => {
   };
 
   // Filter orders by status if needed (for metrics)
-  const deliveredOrders = orders.filter((o) => o.status === "delivered");
-  const cancelledOrders = orders.filter((o) => o.status === "cancelled");
-  const newOrders = orders.filter((o) => {
+  const deliveredOrders = orders?.filter((o) => o.status === "delivered");
+  const cancelledOrders = orders?.filter((o) => o.status === "cancelled");
+  const newOrders = orders?.filter((o) => {
     const created = new Date(o.createdAt);
     // e.g., new this week logic
     return created >= getStartOfPeriod(dataFilter);
   });
 
-  const revenue = deliveredOrders.reduce((sum, o) => sum + o.totalAmount, 0);
+  const revenue = deliveredOrders?.reduce((sum, o) => sum + o.totalAmount, 0);
   const totalOrders = orders.length;
 
   // Build chart data grouped by day/week
   const chartData = buildChartData(orders, dataFilter);
+
+  if (!orders) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div className="w-full h-full p-5">
