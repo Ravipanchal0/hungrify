@@ -8,7 +8,6 @@ import { v4 as uuid } from "uuid";
 // @route   GET /api/user/profile
 // @access  private/user
 const getUser = asyncHandler(async (req, res) => {
-  console.log(req.body);
   const userId = req.body.userId;
 
   if (!userId) {

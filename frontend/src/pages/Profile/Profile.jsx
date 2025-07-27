@@ -122,7 +122,6 @@ const Profile = () => {
 
   // Delete an address handler
   const handleDeleteAddress = async (addrId) => {
-    console.log(addrId);
     if (!window.confirm("Are you sure you want to delete this address?"))
       return;
     try {

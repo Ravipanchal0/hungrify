@@ -19,7 +19,6 @@ const deleteImage = async (imageUrl) => {
     const publicId = withoutVersion.replace(/\.[^/.]+$/, ""); // => sample-folder/sample-image
 
     const result = await cloudinary.uploader.destroy(publicId);
-    console.log(result);
     return result;
   } catch (error) {
     throw new Error("Error deleting image");

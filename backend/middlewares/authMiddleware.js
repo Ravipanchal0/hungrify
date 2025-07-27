@@ -12,7 +12,7 @@ const authMiddleware = async (req, _, next) => {
     req.body.userId = decoded_token.id;
     next();
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw new ApiError(500, error.message);
   }
 };
