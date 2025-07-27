@@ -7,6 +7,7 @@ import {
   RouterProvider,
   Route,
 } from "react-router-dom";
+import StoreContextProvider from "./Context/StoreContext.jsx";
 
 import { Dashboard, AddItem, Orders, Products } from "./pages";
 import { Navbar, Sidebar } from "./components";
@@ -23,5 +24,7 @@ const router = createBrowserRouter(
 );
 
 createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+  <StoreContextProvider>
+    <RouterProvider router={router} />
+  </StoreContextProvider>
 );

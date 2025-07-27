@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { StoreContext } from "../Context/StoreContext";
 import {
   BarChart,
   Bar,
@@ -14,98 +15,41 @@ import {
 } from "recharts";
 
 import { assets } from "../assets/assets";
-
-import { FcMoneyTransfer } from "react-icons/fc"; //Money
-import { FcCancel } from "react-icons/fc"; //cancel
-import { RiFileList3Fill } from "react-icons/ri"; //order
-import { HiNewspaper } from "react-icons/hi2"; //new order
-import { IoCheckmarkDoneCircle } from "react-icons/io5"; //delivered
-
-const rawPieChartData = [
-  { name: "Mon", delivered: 2400, cancelled: 400 },
-  { name: "Tue", delivered: 1398, cancelled: 210 },
-  { name: "Wed", delivered: 800, cancelled: 290 },
-  { name: "Thu", delivered: 908, cancelled: 200 },
-  { name: "Fri", delivered: 400, cancelled: 181 },
-  { name: "Sat", delivered: 3800, cancelled: 500 },
-  { name: "Sun", delivered: 1500, cancelled: 800 },
-];
-
-// Compute `orders` for each day
-const pieChartData = rawPieChartData.map((item) => ({
-  ...item,
-  orders: item.delivered + item.cancelled,
-}));
-
-// Dummy data
-const sampleData = {
-  "This Week": {
-    orders: 1250,
-    delivered: 1100,
-    cancelled: 150,
-    revenue: 12500,
-    newOrders: 300,
-    chart: [
-      { day: "Mon", value: 100 },
-      { day: "Tue", value: 200 },
-      { day: "Wed", value: 300 },
-      { day: "Thu", value: 250 },
-      { day: "Fri", value: 400 },
-      { day: "Sat", value: 500 },
-      { day: "Sun", value: 600 },
-    ],
-  },
-  "Last Week": {
-    orders: 1000,
-    delivered: 900,
-    cancelled: 100,
-    revenue: 10000,
-    newOrders: 200,
-    chart: [
-      { day: "Mon", value: 80 },
-      { day: "Tue", value: 150 },
-      { day: "Wed", value: 200 },
-      { day: "Thu", value: 180 },
-      { day: "Fri", value: 250 },
-      { day: "Sat", value: 300 },
-      { day: "Sun", value: 400 },
-    ],
-  },
-  "This Month": {
-    orders: 5000,
-    delivered: 4500,
-    cancelled: 500,
-    revenue: 50000,
-    newOrders: 1000,
-    chart: [
-      { day: "Week 1", value: 800 },
-      { day: "Week 2", value: 1000 },
-      { day: "Week 3", value: 1200 },
-      { day: "Week 4", value: 1500 },
-    ],
-  },
-  "Last Month": {
-    orders: 4200,
-    delivered: 3800,
-    cancelled: 400,
-    newOrders: 950,
-    revenue: 42000,
-    chart: [
-      { day: "Week 1", value: 600 },
-      { day: "Week 2", value: 900 },
-      { day: "Week 3", value: 1100 },
-      { day: "Week 4", value: 1300 },
-    ],
-  },
-};
+import { MetricCard } from "../components";
 
 const Dashboard = () => {
+  const { fetchAllOrdersList } = useContext(StoreContext);
   const [filter, setFilter] = useState("This Week");
-  const [data, setData] = useState(sampleData["This Week"]);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    setData(sampleData[filter]);
+    loadData();
   }, [filter]);
+
+  const loadData = async () => {
+    try {
+      const allOrders = await fetchAllOrdersList();
+      setOrders(allOrders);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Filter orders by status if needed (for metrics)
+  const deliveredOrders = orders.filter((o) => o.status === "delivered");
+  const cancelledOrders = orders.filter((o) => o.status === "cancelled");
+  const newOrders = orders.filter((o) => {
+    const today = new Date();
+    const created = new Date(o.createdAt);
+    // e.g., new this week logic
+    return created >= getStartOfPeriod(filter);
+  });
+
+  const revenue = deliveredOrders.reduce((sum, o) => sum + o.totalAmount, 0);
+  const totalOrders = orders.length;
+
+  // Build chart data grouped by day/week
+  const chartData = buildChartData(orders, filter);
 
   return (
     <div className="w-full h-full p-5">
@@ -135,31 +79,31 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 mb-12">
         <MetricCard
           title="Orders"
-          value={data.orders}
+          value={totalOrders}
           color="bg-blue-100"
           icon={assets.order}
         />
         <MetricCard
           title="Delivered"
-          value={data.delivered}
+          value={deliveredOrders.length}
           color="bg-green-100"
           icon={assets.delivered}
         />
         <MetricCard
           title="Cancelled"
-          value={data.cancelled}
+          value={cancelledOrders.length}
           color="bg-red-100"
           icon={assets.cancelled_ordered}
         />
         <MetricCard
           title="New Orders"
-          value={data.newOrders}
+          value={newOrders.length}
           color="bg-purple-100"
           icon={assets.new_order}
         />
         <MetricCard
           title="Revenue"
-          value={`\u20B9${data.revenue.toLocaleString()}`}
+          value={`\u20B9${revenue.toLocaleString()}`}
           color="bg-yellow-100"
           icon={assets.revenue}
         />
@@ -167,69 +111,33 @@ const Dashboard = () => {
 
       {/* Chart Section */}
 
-      <div className="w-full h-full lg:h-96 flex flex-col lg:flex-row gap-12">
-        <div className="barchart w-full lg:w-1/2 h-full bg-white p-5 rounded-lg shadow-md">
-          <h4 className="text-normal lg:text-lg font-medium text-gray-700 mb-2">
-            Order Trend
-            <i className="text-xs lg:text-sm font-normal text-gray-400">
-              (This week)
-            </i>
-          </h4>
-          <div className="piechart w-full h-full p-2 md:p-3 pb-2 md:pb-8">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                width={500}
-                height={300}
-                data={pieChartData}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 0,
-                  bottom: 5,
-                }}
-              >
+      <div className="graphs w-full h-full lg:h-96 flex flex-col lg:flex-row gap-12">
+        <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="w-full h-full bg-white p-5 rounded-lg shadow">
+            <h4 className="mb-2 font-medium">Orders Trend</h4>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={chartData.bar}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
+                <XAxis dataKey="label" />
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar
-                  dataKey="orders"
-                  fill="#4394E5"
-                  activeBar={<Rectangle fill="#0066CC" stroke="#0066CC" />}
-                />
-                <Bar
-                  dataKey="delivered"
-                  fill="#63993D"
-                  activeBar={<Rectangle fill="#87BB62" stroke="#87BB62" />}
-                />
-                <Bar
-                  dataKey="cancelled"
-                  fill="#F0561D"
-                  activeBar={<Rectangle fill="#F4784A" stroke="#F4784A" />}
-                />
+                <Bar dataKey="orders" fill="#4394E5" />
+                <Bar dataKey="delivered" fill="#63993D" />
+                <Bar dataKey="cancelled" fill="#F0561D" />
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </div>
 
-        <div className="linechart w-full lg:w-1/2 h-full bg-white p-5 rounded-lg shadow-md">
-          <h4 className="text-lg font-medium text-gray-700 mb-2">
-            Total Revenue
-          </h4>
-          <div className="linechart w-full h-full p-2 md:p-3 md:pb-5 pb-2">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data.chart}>
+          <div className="w-full h-full bg-white p-5 rounded-lg shadow">
+            <h4 className="mb-2 font-medium">Revenue Trend</h4>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={chartData.line}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="day" />
+                <XAxis dataKey="label" />
                 <YAxis />
                 <Tooltip />
-                <Line
-                  type="monotone"
-                  dataKey="value"
-                  stroke="#3B82F6"
-                  strokeWidth={2}
-                />
+                <Line type="monotone" dataKey="revenue" stroke="#3B82F6" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -239,18 +147,57 @@ const Dashboard = () => {
   );
 };
 
-const MetricCard = ({ title, value, color, icon }) => (
-  <div
-    className={`flex items-center gap-x-5 p-4 rounded-lg shadow-md transition-transform transform hover:scale-105 ${color}`}
-  >
-    <div className="icon">
-      <img src={icon} alt="" width={72} />
-    </div>
-    <div className="data">
-      <p className="text-lg text-gray-700 font-medium">{title}</p>
-      <h4 className="text-xl font-bold text-gray-900">{value}</h4>
-    </div>
-  </div>
-);
+const getStartOfPeriod = (filter) => {
+  const now = new Date();
+  switch (filter) {
+    case "This Week":
+      const dayOfWeek = now.getDay();
+      return new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() - dayOfWeek
+      );
+    case "Last Week":
+      const lastWeekStart = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() - now.getDay() - 7
+      );
+      return lastWeekStart;
+    case "This Month":
+      return new Date(now.getFullYear(), now.getMonth(), 1);
+    case "Last Month":
+      return new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    default:
+      return new Date(0);
+  }
+};
+
+const buildChartData = (orders, filter) => {
+  const start = getStartOfPeriod(filter);
+  const grouped = {};
+  orders.forEach((o) => {
+    const c = new Date(o.createdAt);
+    if (c < start) return;
+    let label;
+    if (filter.includes("Week")) {
+      label = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][c.getDay()];
+    } else {
+      label = `Week ${Math.floor((c.getDate() - 1) / 7) + 1}`;
+    }
+    if (!grouped[label])
+      grouped[label] = { orders: 0, delivered: 0, cancelled: 0, revenue: 0 };
+    grouped[label].orders++;
+    grouped[label].revenue += o.totalAmount || 0;
+    if (o.status === "delivered") grouped[label].delivered++;
+    if (o.status === "cancelled") grouped[label].cancelled++;
+  });
+  const bar = Object.entries(grouped).map(([label, vals]) => ({
+    label,
+    ...vals,
+  }));
+  const line = bar.map(({ label, revenue }) => ({ label, revenue }));
+  return { bar, line };
+};
 
 export default Dashboard;

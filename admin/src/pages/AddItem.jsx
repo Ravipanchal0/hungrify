@@ -237,8 +237,10 @@ const Home = () => {
             <option value="" disabled hidden>
               Select Category
             </option>
-            {menuCategories.map((category) => (
-              <option value={category.menu_name}>{category.menu_name}</option>
+            {menuCategories.map((category, index) => (
+              <option key={index} value={category}>
+                {category}
+              </option>
             ))}
           </select>
         </div>
