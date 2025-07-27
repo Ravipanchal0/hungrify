@@ -10,7 +10,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // Parse origins from .env
-const allowedOrigins = process.env.ORIGINS?.split(",") || [];
+const allowedOrigins =
+  process.env.ORIGINS?.split(",").map((origin) => origin.trim()) || [];
+console.log(allowedOrigins);
 
 const corsOptions = {
   origin: function (origin, callback) {
