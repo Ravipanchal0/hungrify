@@ -1,0 +1,1 @@
+This is frontend client side of the hungrify.
