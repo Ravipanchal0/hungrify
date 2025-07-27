@@ -179,7 +179,7 @@ const getStartOfPeriod = (filter) => {
 const buildChartData = (orders, filter) => {
   const start = getStartOfPeriod(filter);
   const grouped = {};
-  orders.forEach((o) => {
+  orders?.forEach((o) => {
     const c = new Date(o.createdAt);
     if (c < start) return;
     let label;
