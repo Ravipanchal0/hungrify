@@ -8,7 +8,24 @@ const app = express(); // Initialize the Express application
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
-app.use(cors());
+
+// Parse origins from .env
+const allowedOrigins = process.env.ORIGINS?.split(",") || [];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 export const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
