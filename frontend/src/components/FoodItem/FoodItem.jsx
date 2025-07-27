@@ -13,7 +13,7 @@ const FoodItem = (item) => {
         <img
           src={image}
           alt=""
-          className="rounded-xl group-hover:scale-125 transition duration-300 w-36 md:w-full"
+          className="rounded-xl group-hover:scale-125 transition duration-300 w-36 h-60 object-cover md:w-full"
         />
         <div className="counter-btn absolute bottom-1 right-2">
           {cartItems[_id] ? (

@@ -44,7 +44,7 @@ const Order = () => {
                   key={item._id}
                   className="order min-h-14 grid place-items-start items-center grid-cols-[2fr_1.5fr_1.5fr_1.2fr_1fr] px-4 py-3 border-b border-b-gray-200"
                 >
-                  <div className="namej self-start">
+                  <div className="name self-start">
                     {item.items.map((food) => (
                       <p key={food._id} className=" text-xs text-gray-700">
                         {food.quantity} x {food.name}

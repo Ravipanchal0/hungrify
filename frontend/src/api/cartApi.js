@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:3001";
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
 //add to cart api
 const addItemToCart = async (itemId, token) => {

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:3001";
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
 //place order
 const placeOrderApi = async (orderData, token) => {

@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:3001/api/auth";
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
 const createAccount = async (data) => {
   try {
-    const response = await axios.post(`${baseUrl}/register`, data);
+    const response = await axios.post(`${baseUrl}/api/auth/register`, data);
     if (response.data.success) {
       return response.data;
     }
@@ -17,7 +17,7 @@ const createAccount = async (data) => {
 
 const loginUser = async (data) => {
   try {
-    const response = await axios.post(`${baseUrl}/login`, data);
+    const response = await axios.post(`${baseUrl}/api/auth/login`, data);
     if (response.data.success) {
       return response.data;
     }
@@ -30,7 +30,7 @@ const loginUser = async (data) => {
 
 const getUserByToken = async (token) => {
   try {
-    const response = await axios.post(`${baseUrl}/token`, { token });
+    const response = await axios.post(`${baseUrl}/api/auth/token`, { token });
     if (response.data.success) {
       return response.data;
     }
