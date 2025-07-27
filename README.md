@@ -1,22 +1,100 @@
-# Hungrify 🍔 – Get Hungry. Get Fed.
+# 🍔 Hungrify - Admin Dashboard
 
-Hungrify is a responsive and dynamic online food delivery web application that connects users with local restaurants and food joints. Designed for ease of use, it offers a smooth ordering experience from browsing menus to real-time order tracking.
+Hungrify is a modern food ordering admin panel designed to manage restaurants, monitor orders, track revenue, and analyze sales performance. This dashboard offers powerful insights, real-time order management, and a clean UI built with React, Node.js, and MongoDB.
 
-## 🔧 Tech Stack
-
-- **Frontend:** ReactJS, HTML, CSS, JavaScript
-- **Backend:** Node.js, Express.js
-- **Database:** MongoDB
-- **Authentication:** JWT
-- **State Management:** Redux (if used)
+---
 
 ## 🚀 Features
 
-- User signup/login and authentication
-- Browse restaurants and menus
-- Add items to cart and place orders
-- Real-time order tracking (basic or advanced)
-- Admin dashboard (if included)
-- Responsive design for mobile & desktop
+- 📦 **Order Management**
 
-## 📁 Folder Structure
+  - View all orders
+  - Filter by status: `pending`, `confirmed`, `preparing`, `on the way`, `delivered`, `cancelled`
+  - Update order statuses dynamically
+
+- 📊 **Analytics Dashboard**
+
+  - Live metrics for orders, revenue, deliveries, cancellations, and new orders
+  - Bar & Line charts for trends (This Week, Last Week, etc.)
+
+- 🧾 **Revenue Tracking**
+
+  - Real-time income overview
+  - Graphical trends over time
+
+- 👥 **User & Order Linking**
+
+  - User-based order tracking
+  - Auto-detachment of users from cancelled orders
+
+- 📁 **Category-wise Menu Support**
+  - Dynamic menu categories
+  - Regional, Indian Snacks, Beverages, etc.
+
+---
+
+## 🛠️ Tech Stack
+
+**Frontend**:
+
+- React.js
+- TailwindCSS
+- Recharts (for graphs)
+
+**Backend**:
+
+- Node.js
+- Express
+- MongoDB (Mongoose ORM)
+
+---
+
+## 📂 Project Structure
+
+hungrify/
+├── client/ # React frontend
+│ ├── src/
+│ │ ├── assets/ # Images & icons
+│ │ ├── components/ # Reusable UI components
+│ │ ├── Context/ # React context API
+│ │ ├── controller/ # Axios API functions
+│ │ └── pages/ # Main views (Dashboard, Orders, etc.)
+│
+├── server/ # Node.js backend
+│ ├── controllers/ # Order, user logic
+│ ├── models/ # Mongoose schemas
+│ ├── routes/ # API routes
+│ ├── middlewares/ # Error handling, authentication
+│ └── utils/ # API response and error helpers
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/hungrify.git
+cd hungrify
+
+---
+
+``# Backend setup
+cd server
+npm install
+
+### create .env file and write your secret keys
+PORT=5000
+MONGODB_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+
+---
+
+``# Future Enhancements
+1. Add role-based admin authentication
+2. Push notifications for live order status
+3. Export analytics reports as PDF
+4. Add customer support dashboard
+
+---
+```
