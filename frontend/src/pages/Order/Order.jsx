@@ -22,7 +22,7 @@ const Order = () => {
   };
 
   return (
-    <div className="orders md:max-w-10/12 mx-auto md:my-5 px-3">
+    <div className="orders md:max-w-10/12 mx-auto my-3 md:my-5 px-3">
       <h3 className="text-2xl mb-3">My Orders</h3>
       {!myOrders ? (
         <p>Loading my orders...</p>
@@ -61,7 +61,7 @@ const Order = () => {
                   <button
                     disabled={item.status === "delivered"}
                     onClick={() => handleCancelOrder(item._id)}
-                    className="action text-rose-600 disabled:text-gray-400 disabled:pointer-events-none cursor-pointer"
+                    className="action text-sm md:text-normal px-2 py-0.5 md:px-4 md:py-1.5 rounded bg-rose-100 text-rose-600 disabled:text-gray-400 disabled:pointer-events-none cursor-pointer"
                   >
                     cancel
                   </button>
