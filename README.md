@@ -39,13 +39,27 @@ Hungrify is a modern food ordering admin panel designed to manage restaurants, m
 
 - React.js
 - TailwindCSS
+- React Icons
+- Toastify
 - Recharts (for graphs)
+- Axios
+- React rounter dom
 
 **Backend**:
 
 - Node.js
 - Express
 - MongoDB (Mongoose ORM)
+- bcrypt
+- jsonwebtoken
+- express-async-handler
+- cloudinary
+- dotenv
+- multer
+- razorpay
+- mongoose
+- uuid
+- validator
 
 ---
 
@@ -107,4 +121,5 @@ JWT_SECRET=your_jwt_secret
 4. Add customer support dashboard
 
 ---
+``
 ```
