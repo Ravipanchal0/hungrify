@@ -102,6 +102,7 @@ const StoreContextProvider = ({ children }) => {
   }, []);
 
   const contextValue = {
+    refreshToken,
     food_list,
     cartItems,
     setCartItems,

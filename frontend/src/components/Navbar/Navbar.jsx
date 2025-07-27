@@ -41,7 +41,7 @@ const Navbar = ({ setShowLogin }) => {
           <div className="relative">
             <div
               onClick={() => setOpenProfileModal(!openProfileModal)}
-              className="peer flex justify-center items-center text-2xl font-semibold font-quicksand text-gray-50 size-10 rounded-full bg-amber-500 cursor-pointer"
+              className="peer flex md:hidden justify-center items-center text-2xl font-semibold font-quicksand text-gray-50 size-10 rounded-full bg-amber-500 cursor-pointer"
             >
               {user?.name?.charAt(0)?.toUpperCase()}
             </div>
@@ -76,7 +76,7 @@ const Navbar = ({ setShowLogin }) => {
         ) : (
           <button
             onClick={() => setShowLogin(true)}
-            className="sign-in "
+            className="sign-in md:hidden"
             title="Sign in"
           >
             <FaSignInAlt

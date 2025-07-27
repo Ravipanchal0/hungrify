@@ -19,17 +19,62 @@ import {
   Order,
 } from "./pages/index.js";
 import StoreContextProvider from "./context/StoreContext.jsx";
+import AuthLayout from "./components/AuthLayout/AuthLayout.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements([
     <Route path="/" element={<App />}>
       <Route index path="" element={<Home />} />
-      <Route path="profile" element={<Profile />} />
-      <Route path="cart" element={<Cart />} />
-      <Route path="checkout" element={<PlaceOrder />} />
-      <Route path="paymentSuccess" element={<PaymentSuccess />} />
-      <Route path="paymentFailed" element={<PaymentFailed />} />
-      <Route path="myorders" element={<Order />} />
+
+      {/* Protected Routes */}
+      <Route
+        path="cart"
+        element={
+          <AuthLayout>
+            <Cart />
+          </AuthLayout>
+        }
+      />
+      <Route
+        path="checkout"
+        element={
+          <AuthLayout>
+            <PlaceOrder />
+          </AuthLayout>
+        }
+      />
+      <Route
+        path="profile"
+        element={
+          <AuthLayout>
+            <Profile />
+          </AuthLayout>
+        }
+      />
+      <Route
+        path="paymentSuccess"
+        element={
+          <AuthLayout>
+            <PaymentSuccess />
+          </AuthLayout>
+        }
+      />
+      <Route
+        path="paymentFailed"
+        element={
+          <AuthLayout>
+            <PaymentFailed />
+          </AuthLayout>
+        }
+      />
+      <Route
+        path="myorders"
+        element={
+          <AuthLayout>
+            <Order />
+          </AuthLayout>
+        }
+      />
     </Route>,
   ])
 );
