@@ -194,9 +194,15 @@ const buildChartData = (orders, filter) => {
     }
     if (!grouped[label])
       grouped[label] = { orders: 0, delivered: 0, cancelled: 0, revenue: 0 };
+
     grouped[label].orders++;
-    grouped[label].revenue += o.totalAmount || 0;
-    if (o.status === "delivered") grouped[label].delivered++;
+
+    // Only count revenue for delivered orders
+    if (o.status === "delivered") {
+      grouped[label].delivered++;
+      grouped[label].revenue += o.totalAmount || 0;
+    }
+
     if (o.status === "cancelled") grouped[label].cancelled++;
   });
   const bar = Object.entries(grouped).map(([label, vals]) => ({
