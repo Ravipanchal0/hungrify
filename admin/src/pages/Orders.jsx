@@ -40,7 +40,7 @@ const Orders = () => {
   };
 
   return (
-    <div className="w-full h-full p-5">
+    <div className="w-full h-full p-5 mb-5">
       {/* Header */}
 
       <div className="header mb-5 flex justify-between">

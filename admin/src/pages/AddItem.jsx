@@ -73,7 +73,7 @@ const Home = () => {
   };
 
   return (
-    <div className="w-full p-1 md:p-5">
+    <div className="w-full p-1 md:p-5 mb-5">
       <div className="header mb-2 md:mb-5">
         <h3 className="text-2xl font-medium text-gray-800">Add New Item</h3>
         <p className="text-gray-500 text-sm">

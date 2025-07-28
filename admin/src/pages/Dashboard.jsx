@@ -59,7 +59,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="w-full h-full p-5">
+    <div className="w-full h-full p-5 mb-5">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-5 gap-4">
         <div className="header">
