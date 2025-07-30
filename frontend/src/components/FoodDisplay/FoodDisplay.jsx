@@ -14,7 +14,9 @@ const FoodDisplay = ({ category }) => {
       <div className="food-display-list grid gap-3 md:gap-8 [grid-template-columns:repeat(auto-fill,_minmax(100px,_1fr))] md:[grid-template-columns:repeat(auto-fill,_minmax(240px,_1fr))] mt-8">
         {food_list.map((item) => {
           if (category === "all" || category === item.category) {
-            return <FoodItem key={item._id} item={item} />;
+            if (item.isAvailable) {
+              return <FoodItem key={item._id} item={item} />;
+            }
           }
         })}
       </div>

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+
+import { StoreContext } from "../Context/StoreContext";
 import {
   fetchMenuItems,
   deleteMenuItem,
@@ -14,6 +14,7 @@ import { MdEditSquare } from "react-icons/md";
 import { toast } from "react-toastify";
 
 const Products = () => {
+  const { menuCategories } = useContext(StoreContext);
   const [list, setList] = useState([]);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [itemToEdit, setItemToEdit] = useState(null);
@@ -263,17 +264,11 @@ const Products = () => {
                   required
                   className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                 >
-                  <option value="" disabled hidden>
-                    Select Category
-                  </option>
-                  <option value="salad">Salad</option>
-                  <option value="rolls">Rolls</option>
-                  <option value="desserts">Desserts</option>
-                  <option value="sandwich">Sandwich</option>
-                  <option value="cake">Cake</option>
-                  <option value="pure veg">Pure Veg</option>
-                  <option value="pasta">Pasta</option>
-                  <option value="noddles">Noddles</option>
+                  {menuCategories.map((category, index) => (
+                    <option key={index} value={category}>
+                      {category}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="flex justify-end mt-2 gap-x-5">
